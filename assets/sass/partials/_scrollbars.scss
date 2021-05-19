@@ -1,0 +1,15 @@
+body{
+    ::-webkit-scrollbar {
+        width: 7px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: rgba($color: #ECECEC, $alpha: .18);
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb{
+          background: rgba($color: #f6f6f6, $alpha: .5);
+          border-radius: 3px;
+      }
+}

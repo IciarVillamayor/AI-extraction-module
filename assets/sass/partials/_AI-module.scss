@@ -42,29 +42,41 @@
          border-radius: 3px;
          overflow: auto;
         
+         // OLD TERMS
          .term{
              width: 100%;
-             min-height: calc(100% / 3);
-             padding: 5px $base*2;
+             
              display: flex;
-             justify-content: center;
-             flex-direction: column;
-             .source_text{
-                 font-size: 12px;
-                 line-height: 12px;
-                 color: $source_text;
-                  
+             align-items: center;
+            
+             .termText{
+                padding: 5px $base*2;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                .source_text{
+                    font-size: 12px;
+                    line-height: 12px;
+                    color: $source_text;
+                     
+                   }
+                .target_text{
+                    font-size: 14px;
+                    
                 }
-             .target_text{
-                 font-size: 14px;
-                 
              }
+             
          }
 
          // NEW TERM
 
          .newTerm{
              background-color: $new_term_bg;
+             .newIndicator{
+                width: 3px;
+                height: 30px;
+                background-color: $newIndicator;
+             }
              .target_text{
                  font-weight: 600;
              }
