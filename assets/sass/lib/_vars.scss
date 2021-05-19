@@ -1,0 +1,30 @@
+$font_family_base: 'DM Sans',
+'Helvetica',
+Arial,
+sans_serif;
+$base: .5rem;
+$font_size_base: $base * 2;
+$font_weight_base: normal;
+$line_height_base: $base * 3;
+$body_color: #E5E5EA;
+$body_bg: #363636;
+$module_bg: #191919;
+
+$headings_margin_bottom: 0;
+$paragraph_margin_bottom: 0;
+
+$dt_font_weight: bold;
+
+$link_color: #345c8d;
+$link_decoration: none;
+$link_hover_color: darken($link_color, 10%);
+$link_hover_decoration: none;
+$table_cell_padding: .5em;
+
+$text_muted: lighten($body_color, 15%);
+
+// AI EXTRACTION VARS
+
+$light_bg: #3A3A3C;
+$new_term_bg: #0B354E;
+$source_text: #AEAEB2;

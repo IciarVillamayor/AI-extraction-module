@@ -1,0 +1,73 @@
+.AI_extraction_module{
+    padding: $base/2 .7rem;
+    min-height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    //overflow: auto;
+    .named_entities{
+        grid-area: 1 / 1 / 2/ 2;
+    }
+
+    .specialistic{
+        grid-area: 1 / 2 / 2/ 3;
+
+    }
+
+    .numbers{
+        grid-area: 1 / 3 / 2/ 4;
+    }
+     .AI_column{
+        max-height: 100%;
+        overflow: hidden;
+        border-radius: 3px;
+     }
+    // EACH COLUMN'S TITLE
+
+    .title{
+        display: flex;
+        align-items: center;
+        margin: 0 0 $base/2 $base;
+        span{
+            margin-right: $base;
+        }
+    }
+
+     // COLUMNS
+
+     .terms{
+         width: 100%;
+         min-height: 82%;
+         max-height: 82%;
+         background-color: $light_bg;
+         border-radius: 3px;
+         overflow: auto;
+        
+         .term{
+             width: 100%;
+             min-height: calc(100% / 3);
+             padding: 5px $base*2;
+             display: flex;
+             justify-content: center;
+             flex-direction: column;
+             .source_text{
+                 font-size: 12px;
+                 line-height: 12px;
+                 color: $source_text;
+                  
+                }
+             .target_text{
+                 font-size: 14px;
+                 
+             }
+         }
+
+         // NEW TERM
+
+         .newTerm{
+             background-color: $new_term_bg;
+             .target_text{
+                 font-weight: 600;
+             }
+         }
+     }
+}

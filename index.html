@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html class="no-js" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="theme-color" content="#fafafa" />
+
+    <title>Boiler</title>
+
+    <meta name="description" content="" />
+    <link rel="apple-touch-icon" href="./assets/img/icon.png" />
+    <link rel="icon" href="./assets/img/favicon.png" />
+    <link rel="stylesheet" href="./assets/css/main.css" />
+    <link href="./assets/css/main.css.map" />
+</head>
+
+<body>
+    <div class="app">
+        <header></header>
+
+        <div class="main">
+            <div class="presentation"></div>
+            <div class="speaker_video"></div>
+    
+            <div class="AI_extraction_module">
+                <div class="named_entities AI_column">
+                    <div class="title">
+                        <span class="fa fa-globe"></span>
+                        <h5>Named Entities</h5>
+                    </div>
+                    <div id="entities_terms" class="terms">
+                        <div class="term">
+                            <span class="source_text"></span>
+                            <span class="target_text">Protettorato Britannico</span>
+                        </div>
+                        <div class="term">
+                            <span class="source_text"></span>
+                            <span class="target_text">Protettorato Britannico</span>
+                        </div>
+                        <div class="term">
+                            <span class="source_text">Sage of Six Paths</span>
+                            <span class="target_text">Eremita delle Sei Vie T...</span>
+                        </div>
+                    </div> 
+
+                </div><!--/named_entities-->
+                <div class="specialistic AI_column">
+                    <div class="title">
+                        <span class="fa fa-language"></span>
+                        <h5>Specialistic Terms</h5>
+                    </div>
+
+                    <div id="specialistic_terms" class="terms"> 
+                        <div class="term">
+                            <span class="source_text">US dollars</span>
+                            <span class="target_text">Dollary USA</span>
+                        </div>
+                        <div class="term">
+                            <span class="source_text">Britannic Proctectorship</span>
+                            <span class="target_text">Protettorato Britannico</span>
+                        </div>
+                        <div class="term newTerm">
+                            <span class="source_text">Gross domestic product</span>
+                            <span class="target_text">Prodotto interno lordo</span>
+                        </div>
+                        <div class="term">
+                            <span class="source_text">Britannic Proctectorship</span>
+                            <span class="target_text">Protettorato Britannico</span>
+                        </div>
+                    </div>
+
+                </div><!--/specialistic_terms-->
+                <div class="numbers AI_column">
+                    <div class="title">
+                        <span class="fa fa-hashtag"></span>
+                        <h5>Numbers</h5>
+                    </div>
+
+                    <div id="numeric_terms" class="terms">
+                        
+                    </div>
+                </div> <!--/numbers-->
+            </div><!--/AI_extraction_module-->
+    
+            <div class="interpreter_chat"></div>
+        </div><!--/main-->
+        
+        <div class="interpreter_console"></div>
+    </div>
+
+    <script src="./app/main.js"></script>
+</body>
+
+</html>
