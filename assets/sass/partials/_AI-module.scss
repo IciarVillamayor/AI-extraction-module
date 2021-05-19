@@ -3,7 +3,10 @@
     min-height: 100%;
     max-height: 100%;
     overflow: hidden;
-    //overflow: auto;
+    
+
+//  COLUMNS LAYOUT 
+    
     .named_entities{
         grid-area: 1 / 1 / 2/ 2;
     }
@@ -12,28 +15,42 @@
         grid-area: 1 / 2 / 2/ 3;
 
     }
-
     .numbers{
         grid-area: 1 / 3 / 2/ 4;
     }
+
      .AI_column{
         max-height: 100%;
         overflow: hidden;
         border-radius: 3px;
      }
-    // EACH COLUMN'S TITLE
+     .AI_settings{
+         display: flex; 
+         flex-direction: column;
+         justify-content: space-between;
+         align-items: center;
+         padding: 4px $base $base $base;
+
+         span{
+             font-size: 1.2rem;
+         }
+     }
+
+// COLUMNS 
+
+
+//TITLE
 
     .title{
         display: flex;
         align-items: center;
-        margin: 0 0 $base/2 $base;
+        margin: 0 0 $base/2 $base*1.5;
         span{
             margin-right: $base;
         }
     }
 
-     // COLUMNS
-
+// TERMS
      .terms{
          width: 100%;
          min-height: 82%;
@@ -42,10 +59,9 @@
          border-radius: 3px;
          overflow: auto;
         
-         // OLD TERMS
+         // MAIN TERM STYLES (OLD TERM) 
          .term{
              width: 100%;
-             
              display: flex;
              align-items: center;
             
@@ -54,22 +70,25 @@
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
-                .source_text{
+
+                // INPUT LANGUAGE
+                .source_text, .referent_text{
                     font-size: 12px;
                     line-height: 12px;
                     color: $source_text;
-                     
-                   }
-                .target_text{
-                    font-size: 14px;
-                    
                 }
+
+                // INTERPRETERS LANGUAGE
+                .target_text, .number_text{
+                    font-size: 14px;
+                }
+
+               
              }
              
          }
 
          // NEW TERM
-
          .newTerm{
              background-color: $new_term_bg;
              .newIndicator{
@@ -82,4 +101,6 @@
              }
          }
      }
+
+     
 }
