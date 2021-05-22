@@ -91,10 +91,12 @@
          // NEW TERM
          .newTerm{
              background-color: $new_term_bg;
+             position: relative;
              .newIndicator{
                 width: 3px;
                 height: 30px;
                 background-color: $newIndicator;
+                position: absolute;
              }
              .target_text{
                  font-weight: 600;
