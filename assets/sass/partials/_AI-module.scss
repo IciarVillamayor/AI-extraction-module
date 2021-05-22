@@ -57,7 +57,8 @@
          max-height: 82%;
          background-color: $light_bg;
          border-radius: 3px;
-         overflow: auto;
+         overflow-y: scroll;
+
         
          // MAIN TERM STYLES (OLD TERM) 
          .term{

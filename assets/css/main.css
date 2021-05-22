@@ -3519,7 +3519,7 @@ h5 {
   max-height: 82%;
   background-color: #3A3A3C;
   border-radius: 3px;
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .AI_extraction_module .terms .term {
