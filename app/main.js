@@ -3,22 +3,72 @@ window.onload = () => {
 };
 
 const init = () => {
-    new ExtractionModuleNames({
-        data: namedEntities,
-        root: "#entities_terms",
-    });
+    fetch("app/models/terms.csv")
+        .then((d) => d.text())
+        .then((d) => {
+            console.log(d);
+        });
 
-    new ExtractionModuleTerms({
-        data: specialisticTerms,
-        root: "#specialistic_terms",
-    });
-
-    new ExtractionModuleNumbers({
-        data: numbers,
-        root: "#numeric_terms",
-    });
+    const loop = new LoopExtractionModule();
+    loop.append(
+        new ExtractionModuleNames({
+            data: namedEntities,
+            root: "#entities_terms",
+        })
+    )
+        .append(
+            new ExtractionModuleTerms({
+                data: specialisticTerms,
+                root: "#specialistic_terms",
+            })
+        )
+        .append(
+            new ExtractionModuleNumbers({
+                data: numbers,
+                root: "#numeric_terms",
+            })
+        )
+        .start();
 };
 
+/**
+ *
+ */
+class LoopExtractionModule {
+    constructor() {
+        this.components = [];
+        this.timer;
+        this.initialTimeStamp;
+    }
+    start() {
+        this.initialTimeStamp = new Date().getTime();
+        const timeStamp = new Date().getTime() - this.initialTimeStamp;
+        this.propagateStart(timeStamp);
+
+        this.timer = setInterval(() => {
+            const timeStamp = new Date().getTime() - this.initialTimeStamp;
+            this.propagateTick(timeStamp);
+        }, 1000);
+    }
+    append(component) {
+        this.components.push(component);
+        return this;
+    }
+    propagateStart(timeStamp) {
+        this.components.forEach((component) => {
+            component.start(timeStamp);
+        });
+    }
+    propagateTick(timeStamp) {
+        this.components.forEach((component) => {
+            component.tick(timeStamp);
+        });
+    }
+}
+
+/**
+ *
+ */
 class AbstractExtractionModule {
     constructor({ data, root }) {
         this.data = data;
@@ -33,16 +83,22 @@ class AbstractExtractionModule {
     }
     init() {
         this.clearElements();
+    }
+    start() {
         this.hasBegan = true;
-        this.timer = setInterval(() => {
-            if (this.data[this.lastRenderedIndex]) {
-                this.renderElementById(this.lastRenderedIndex);
-                this.lastRenderedIndex++;
-            } else {
-                clearInterval(this.timer);
-                this.hasEnded = true;
-            }
-        }, Math.random() * 2000 + 2000);
+    }
+    tick(timeStamp) {
+        const date = new Date(timeStamp);
+        const hours = date.getHours() - 1;
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+        console.log(`${hours}:${minutes}:${seconds}`);
+        if (this.data[this.lastRenderedIndex]) {
+            this.renderElementById(this.lastRenderedIndex);
+            this.lastRenderedIndex++;
+        } else {
+            this.hasEnded = true;
+        }
     }
     clearElements() {
         this.$blocks = [];
