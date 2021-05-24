@@ -1,8 +1,7 @@
 ## AI-Extraction Module
 Testing purposes
 
-![Testing purposes](assets/img/readme.png)
-
+<img src="assets/img/readme.png" width="450"/>
 
 ### Roadmap
 
