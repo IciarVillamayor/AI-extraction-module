@@ -10,7 +10,6 @@ window.onload = () => {
  */
 let data;
 let debug = location.href.includes("debug=true");
-let debugSeed = 3000;
 
 /**
  * init fn
@@ -132,7 +131,6 @@ class AbstractExtractionModule {
         const dItem = this.data[this.lastRenderedIndex];
         if (dItem) {
             //
-            this.setLastToUnactive();
 
             //
             let $el = document.createElement("div");
@@ -141,12 +139,14 @@ class AbstractExtractionModule {
             $el.dataset.id = dItem["#"];
             $el.innerHTML = this.createInnerHTML(dItem);
             // this.$root.innerHTML = $el.outerHTML + this.$root.innerHTML;
-            this.setScrollToBottom();
             this.$root.appendChild($el)
 
             //
-            $el = this.$root.querySelectorAll(".term")[0];
-            this.$blocks.push($el);
+            $el = this.$root.querySelectorAll(".term");
+            this.$blocks.push($el[$el.length - 1]);
+            
+            this.setLastToUnactive();
+            this.setScrollToBottom();
 
             //
             return $el;
@@ -168,6 +168,8 @@ class AbstractExtractionModule {
         `;
     }
     setLastToUnactive() {
+        console.log(this.$blocks);
+
         if (this.$blocks[this.lastRenderedIndex - 1]) {
             const lastBlock = this.$blocks[this.lastRenderedIndex - 1];
             lastBlock.classList.remove("newTerm");
