@@ -9,6 +9,8 @@ window.onload = () => {
  * global vars
  */
 let data;
+let debug = location.href.includes("debug=true");
+let debugSeed = 5000;
 
 /**
  * init fn
@@ -25,7 +27,7 @@ const init = async () => {
     loop.append(new ExtractionModuleNames("#entities_terms"))
         .append(new ExtractionModuleTerms("#specialistic_terms"))
         .append(new ExtractionModuleNumbers("#numeric_terms"))
-        .start();
+        .start({ debug });
 };
 
 /**
@@ -53,14 +55,20 @@ class LoopExtractionModule {
         this.timer;
         this.initialTimeStamp;
     }
-    start() {
+    start({ debug }) {
         this.initialTimeStamp = new Date().getTime();
         const timeStamp = new Date().getTime() - this.initialTimeStamp;
 
-        this.timer = setInterval(() => {
-            const timeStamp = new Date().getTime() - this.initialTimeStamp;
-            this.propagateTick(timeStamp);
-        }, 1000);
+        if (debug) {
+            data.forEach((dItem, i) => {
+                this.propagateTick(i * debugSeed)
+            });
+        } else {
+            this.timer = setInterval(() => {
+                const timeStamp = new Date().getTime() - this.initialTimeStamp;
+                this.propagateTick(timeStamp);
+            }, 1000);
+        }
     }
     append(component) {
         this.components.push(component);
@@ -147,8 +155,12 @@ class AbstractExtractionModule {
         return `
             <div class="newIndicator"></div>
             <div class="termText ">
-                <span class="source_text">${dItem["Target"] ? dItem["Source"] : ""}</span>
-                <span class="target_text">${dItem["Target"] ? dItem["Target"] : dItem["Source"]}</span>
+                <span class="source_text">${
+                    dItem["Target"] ? dItem["Source"] : ""
+                }</span>
+                <span class="target_text">${
+                    dItem["Target"] ? dItem["Target"] : dItem["Source"]
+                }</span>
             </div>
         `;
     }
