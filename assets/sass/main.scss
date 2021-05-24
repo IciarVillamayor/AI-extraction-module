@@ -32,7 +32,7 @@ body {
         //grid-template-columns: 1fr;
         grid-column-gap: $base;
         grid-row-gap: $base;
-        grid-template-rows: 52px 1fr 24%;
+        grid-template-rows:  52px calc(100% - (52px + 24% + 16px)) 24%;
         overflow: hidden;
 
         header{
