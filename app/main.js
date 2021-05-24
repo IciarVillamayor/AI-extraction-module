@@ -60,6 +60,9 @@ class LoopExtractionModule {
         const timeStamp = new Date().getTime() - this.initialTimeStamp;
 
         if (debug) {
+            data.forEach((dItem) => {
+                const finalDateArr = dItem["Time stamp"].split(":").map(a => +a);
+                const timeStamp = new Date(1970, 0, 1, 1, finalDateArr[0], finalDateArr[1]).getTime();
                 this.propagateTick(timeStamp);
             });
         } else {
@@ -137,8 +140,9 @@ class AbstractExtractionModule {
             $el.classList.add("newTerm");
             $el.dataset.id = dItem["#"];
             $el.innerHTML = this.createInnerHTML(dItem);
-            this.$root.innerHTML = $el.outerHTML + this.$root.innerHTML;
-            this.setScrollToTop();
+            // this.$root.innerHTML = $el.outerHTML + this.$root.innerHTML;
+            this.setScrollToBottom();
+            this.$root.appendChild($el)
 
             //
             $el = this.$root.querySelectorAll(".term")[0];
@@ -171,6 +175,12 @@ class AbstractExtractionModule {
     }
     setScrollToTop() {
         this.$root.scrollTo(0, 0);
+    }
+    setScrollToBottom() {
+        this.$root.scrollTo(0, this.$root.scrollHeight);
+        if (debug) {
+            this.$root.style.overflowY = "auto"
+        }
     }
 }
 
