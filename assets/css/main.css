@@ -3633,8 +3633,8 @@ body .app .main {
   display: -ms-grid;
   display: grid;
   margin: 0 0.5rem;
-  -ms-grid-rows: (calc(100% / 3 - 4px))[3];
-      grid-template-rows: repeat(3, calc(100% / 3 - 4px));
+  -ms-grid-rows: 1fr auto;
+      grid-template-rows: 1fr auto;
   -ms-grid-columns: (1fr)[12];
       grid-template-columns: repeat(12, 1fr);
   grid-column-gap: 0.5rem;
