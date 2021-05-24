@@ -60,8 +60,17 @@ class LoopExtractionModule {
 
         if (debug) {
             data.forEach((dItem) => {
-                const finalDateArr = dItem["Time stamp"].split(":").map(a => +a);
-                const timeStamp = new Date(1970, 0, 1, 1, finalDateArr[0], finalDateArr[1]).getTime();
+                const finalDateArr = dItem["Time stamp"]
+                    .split(":")
+                    .map((a) => +a);
+                const timeStamp = new Date(
+                    1970,
+                    0,
+                    1,
+                    1,
+                    finalDateArr[0],
+                    finalDateArr[1]
+                ).getTime();
                 this.propagateTick(timeStamp);
             });
         } else {
@@ -131,24 +140,20 @@ class AbstractExtractionModule {
         const dItem = this.data[this.lastRenderedIndex];
         if (dItem) {
             //
-
-            //
             let $el = document.createElement("div");
             $el.classList.add("term");
             $el.classList.add("newTerm");
             $el.dataset.id = dItem["#"];
             $el.innerHTML = this.createInnerHTML(dItem);
-            // this.$root.innerHTML = $el.outerHTML + this.$root.innerHTML;
-            this.$root.appendChild($el)
+            this.$root.appendChild($el);
 
             //
             $el = this.$root.querySelectorAll(".term");
             this.$blocks.push($el[$el.length - 1]);
-            
-            this.setLastToUnactive();
-            this.setScrollToBottom();
 
             //
+            this.setLastToUnactive();
+            this.setScrollToBottom();
             return $el;
         } else {
             return false;
@@ -179,7 +184,7 @@ class AbstractExtractionModule {
     setScrollToBottom() {
         this.$root.scrollTo(0, this.$root.scrollHeight);
         if (debug) {
-            this.$root.style.overflowY = "auto"
+            this.$root.style.overflowY = "auto";
         }
     }
 }
