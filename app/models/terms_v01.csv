@@ -7,20 +7,22 @@
 6,1:11,Kanagawa-ken,Prefettura di Kanagawa,Named entity,
 7,1:23,MPM (Monetary Policy Meeting),MPM (Conferenza di Politica Monetaria),Terms,
 8,1:46,GDP ,PIL,Terms,
-9,1:49,5.38 trillion,"5,38 billioni",Numbers,dollari USA
+9,1:49,5.38 trillion,,Numbers,dollari USA
+10,1:50,US dollars,dollari USA,Terms,
 11,2:27,Hiroshige Sekō,,Named entity,
 12,2:33,Kuroda Haruhiko,,Named entity,
-13,2:46,45,,Numbers,minuti
+13,2:46,45,,Numbers,minute
 15,3:02,COVID-19,COVID-19,Terms,
 16,3:45,SFTBF (SoftBank),SFTBF (Softbank),Named entity,
-17,3:50,159.60 billion ,"159,60 miliardi",Numbers,dollari USA
+17,3:50,159.60 billion ,,Numbers,US Dollars
 19,4:00,COVID-19,,Terms,
 20,4:19,hot-rolled iron ,arrotolati laminati a caldo,Terms,
-21,4:22,3.51%,,Numbers,
-23,4:25,12.5 million ,"12,5 milioni",Numbers,tonnellate
+21,4:22,3.51,"3,51",Numbers,%
+22,4:22,%,%,Terms,
+23,4:25,12.5 million ,"12,5 milioni",Numbers,tons
 25,4:26,YTD (year to date),YTD (anno a data),Terms,
 26,4:27,2018,2018,Numbers,
-27,4:30,16.85 million,"16,85 milioni",Numbers,tonnellate
+27,4:30,16.85 million,"16,85 milioni",Numbers,tons
 29,4:32,YTD (year to date),YTD (anno a data),Terms,
 30,4:33,2019,2019,Numbers,
 31,4:58,spinning extruders ,estrusori rotanti,Terms,
@@ -28,23 +30,25 @@
 33,5:25,semiconductor lithography equipment,apparecchiature per litografia di semiconduttori ,Terms,
 34,5:26,wire enamel,smalto per filo,Terms,
 35,6:07,woody biomass ,biomassa legnosa,Terms,
-36,6:10,10.2 million,"10,2 milioni",Numbers,BDt (tonnellate a secco)
+36,6:10,10.2 million,"10,2 milioni",Numbers,BDt (bone-dry metric tons)
 37,6:11,BDt (bone-dry metric tons),BDt (tonnellate a secco),Terms,
 38,6:12,2020,2020,Numbers,
 39,6:15,2022,2022,Numbers,
 40,6:17,biomass plant,impianto di biomassa,Terms,
 41,6:18,Aichi-ken,Prefettura di Aichi,Named entity,
-42,6:20,75,75,Numbers,megawatt
+42,6:20,75,75,Numbers,megawatts
 44,6:26,Kyshu,Kyshu,Named entity,
-45,6:28,0.71 million,"0,71 milioni",Numbers,tonnellate
-47,6:30,PKS (palm kernel shells),PKS (guscio di palmisto),Terms,
+45,6:28,0.71 million,"0,71 milioni",Numbers,metric tons
+46,6:29,metric tons,tonnellate,Terms,
+47,6:30,PKS (palm kernel shells),PKS (guscio di palma kernel),Terms,
 48,6:31,2018,2018,Numbers,
 50,7:07,65,65,Numbers,
-51,7:11,28.7%,"28,7%",Numbers,
+51,7:11,28.7,"28,7",Numbers,
+52,7:11,%,%,Terms,
 53,7:13,2020,2020,Numbers,
 55,7:19,"300,000",300.000,Numbers,
 56,7:20,2020,2020,Numbers,
-57,7:26,36.17 million ,"36,17 milioni",Numbers,persone
+57,7:26,36.17 million ,"36,17 milioni",Numbers,people
 59,7:28,65,65,Numbers,
 60,7:31,2020,2020,Numbers,
 61,7:58,Peptide Discovery Platform System,piattaforma di creazione dei peptidi,Terms,
