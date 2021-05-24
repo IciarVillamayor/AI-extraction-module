@@ -197,7 +197,7 @@ class ExtractionModuleNumbers extends AbstractExtractionModule {
 
             </div>
             <div class="termText">
-                <span class="number_text">${dItem["Source"]}</span>
+                <span class="number_text">${dItem["Target"]}</span>
                 <span class="referent_text">${dItem["Position"]}</span>
             </div>
         `;
