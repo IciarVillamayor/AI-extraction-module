@@ -1,109 +1,149 @@
-.AI_extraction_module{
-    padding: $base/2 .7rem;
+$ai_base_lines: 4;
+$ai_base_line_size: 7;
+
+.AI_extraction_module {
+    padding: $base * 2 $base;
     min-height: 100%;
     max-height: 100%;
     overflow: hidden;
-    
 
-//  COLUMNS LAYOUT 
-    
-    .named_entities{
-        grid-area: 1 / 1 / 2/ 2;
-    }
 
-    .specialistic{
-        grid-area: 1 / 2 / 2/ 3;
+    //  COLUMNS LAYOUT 
 
-    }
-    .numbers{
-        grid-area: 1 / 3 / 2/ 4;
-    }
+    // .named_entities{
+    //     grid-area: 1 / 1 / 2/ 2;
+    // }
 
-     .AI_column{
-        max-height: 100%;
+    // .specialistic{
+    //     grid-area: 1 / 2 / 2/ 3;
+
+    // }
+    // .numbers{
+    //     grid-area: 1 / 3 / 2/ 4;
+    // }
+
+    .AI_column {
+        height: 100%;
         overflow: hidden;
         border-radius: 3px;
-     }
-     .AI_settings{
-         display: flex; 
-         flex-direction: column;
-         justify-content: space-between;
-         align-items: center;
-         padding: 4px $base $base $base;
-
-         span{
-             font-size: 1.2rem;
-         }
-     }
-
-// COLUMNS 
-
-
-//TITLE
-
-    .title{
         display: flex;
+        flex-direction: column;
+    }
+
+    .AI_settings {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
-        margin: 0 0 $base/2 $base*1.5;
-        span{
-            margin-right: $base;
+        padding: $base;
+
+        span {
+            font-size: 1rem;
         }
     }
 
-// TERMS
-     .terms{
-         width: 100%;
-         min-height: 82%;
-         max-height: 82%;
-         background-color: $light_bg;
-         border-radius: 3px;
-         overflow-y: hidden;
+    // COLUMNS 
 
-        
-         // MAIN TERM STYLES (OLD TERM) 
-         .term{
-             width: 100%;
-             display: flex;
-             align-items: center;
-            
-             .termText{
-                padding: 5px $base*2;
+
+    //TITLE
+
+    .title {
+        display: flex;
+        align-items: center;
+        margin: 0 0 $base * .5;
+        color: $source_text;
+
+        .fa {
+            margin-right: $base;
+            font-size: .9rem;
+            color: $source_text;
+        }
+    }
+
+    // TERMS
+    .terms {
+        background-color: $light_bg;
+        height: $base * ($ai_base_line_size * $ai_base_lines);
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: repeat(auto-fit, minmax($base * $ai_base_line_size, 1fr));
+        grid-template-columns: 100%;
+
+        // MAIN TERM STYLES (OLD TERM) 
+        .term {
+            width: 100%;
+            border-bottom: 1px solid #585858;
+            // height: $base * $ai_base_line_size;
+            display: flex;
+            align-content: center;
+
+            .termText {
+                padding: $base $base * 1.5 calc(#{$base} - 1px);
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
+                min-height: $base * 5.5;
+                overflow: hidden;
 
                 // INPUT LANGUAGE
-                .source_text, .referent_text{
+                .source_text,
+                .referent_text {
                     font-size: 12px;
-                    line-height: 12px;
+                    line-height: $base * 2.5;
                     color: $source_text;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
 
                 // INTERPRETERS LANGUAGE
-                .target_text, .number_text{
+                .target_text,
+                .number_text {
                     font-size: 14px;
+                    line-height: $base * 2.5;
+                }
+            }
+
+            // NEW TERM
+            &.newTerm {
+                background-color: $new_term_bg;
+                position: relative;
+                border-bottom: 1px solid #35556d;
+
+                .newIndicator {
+                    width: 3px;
+                    height: 30px;
+                    background-color: $newIndicator;
+                    position: absolute;
+                    transform: translate(0, -50%);
+                    top: 50%;
                 }
 
-               
-             }
-             
-         }
+                .target_text {
+                    font-weight: 600;
+                }
+            }
 
-         // NEW TERM
-         .newTerm{
-             background-color: $new_term_bg;
-             position: relative;
-             .newIndicator{
-                width: 3px;
-                height: 30px;
-                background-color: $newIndicator;
-                position: absolute;
-             }
-             .target_text{
-                 font-weight: 600;
-             }
-         }
-     }
 
-     
+            &:last-child {
+                border: 0;
+            }
+
+            &.double {
+                // height: $base * $ai_base_line_size * 2;
+                grid-row-end: span 2;
+            }
+
+            &.ellipsis {
+                overflow: hidden;
+                grid-row-end: span 1 !important;
+
+                .target_text {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
 }

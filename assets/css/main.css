@@ -3442,40 +3442,23 @@ h5 {
 }
 
 .AI_extraction_module {
-  padding: 0.25rem 0.7rem;
+  padding: 1rem 0.5rem;
   min-height: 100%;
   max-height: 100%;
   overflow: hidden;
 }
 
-.AI_extraction_module .named_entities {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  -ms-grid-column: 1;
-  -ms-grid-column-span: 1;
-  grid-area: 1 / 1 / 2/ 2;
-}
-
-.AI_extraction_module .specialistic {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  -ms-grid-column: 2;
-  -ms-grid-column-span: 1;
-  grid-area: 1 / 2 / 2/ 3;
-}
-
-.AI_extraction_module .numbers {
-  -ms-grid-row: 1;
-  -ms-grid-row-span: 1;
-  -ms-grid-column: 3;
-  -ms-grid-column-span: 1;
-  grid-area: 1 / 3 / 2/ 4;
-}
-
 .AI_extraction_module .AI_column {
-  max-height: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: 3px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .AI_extraction_module .AI_settings {
@@ -3492,11 +3475,11 @@ h5 {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 4px 0.5rem 0.5rem 0.5rem;
+  padding: 0.5rem;
 }
 
 .AI_extraction_module .AI_settings span {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .AI_extraction_module .title {
@@ -3506,34 +3489,40 @@ h5 {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  margin: 0 0 0.25rem 0.75rem;
+  margin: 0 0 0.25rem;
+  color: #AEAEB2;
 }
 
-.AI_extraction_module .title span {
+.AI_extraction_module .title .fa {
   margin-right: 0.5rem;
+  font-size: .9rem;
+  color: #AEAEB2;
 }
 
 .AI_extraction_module .terms {
-  width: 100%;
-  min-height: 82%;
-  max-height: 82%;
   background-color: #3A3A3C;
-  border-radius: 3px;
-  overflow-y: hidden;
+  height: 14rem;
+  overflow: hidden;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: (minmax(3.5rem, 1fr))[auto-fit];
+      grid-template-rows: repeat(auto-fit, minmax(3.5rem, 1fr));
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
 }
 
 .AI_extraction_module .terms .term {
   width: 100%;
+  border-bottom: 1px solid #585858;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
 .AI_extraction_module .terms .term .termText {
-  padding: 5px 1rem;
+  padding: 0.5rem 0.75rem calc(0.5rem - 1px);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -3544,32 +3533,65 @@ h5 {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  min-height: 2.75rem;
+  overflow: hidden;
 }
 
-.AI_extraction_module .terms .term .termText .source_text, .AI_extraction_module .terms .term .termText .referent_text {
+.AI_extraction_module .terms .term .termText .source_text,
+.AI_extraction_module .terms .term .termText .referent_text {
   font-size: 12px;
-  line-height: 12px;
+  line-height: 1.25rem;
   color: #AEAEB2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.AI_extraction_module .terms .term .termText .target_text, .AI_extraction_module .terms .term .termText .number_text {
+.AI_extraction_module .terms .term .termText .target_text,
+.AI_extraction_module .terms .term .termText .number_text {
   font-size: 14px;
+  line-height: 1.25rem;
 }
 
-.AI_extraction_module .terms .newTerm {
+.AI_extraction_module .terms .term.newTerm {
   background-color: #0B354E;
   position: relative;
+  border-bottom: 1px solid #35556d;
 }
 
-.AI_extraction_module .terms .newTerm .newIndicator {
+.AI_extraction_module .terms .term.newTerm .newIndicator {
   width: 3px;
   height: 30px;
   background-color: #3B6881;
   position: absolute;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+  top: 50%;
 }
 
-.AI_extraction_module .terms .newTerm .target_text {
+.AI_extraction_module .terms .term.newTerm .target_text {
   font-weight: 600;
+}
+
+.AI_extraction_module .terms .term:last-child {
+  border: 0;
+}
+
+.AI_extraction_module .terms .term.double {
+  -ms-grid-row-span: 2;
+      grid-row-end: span 2;
+}
+
+.AI_extraction_module .terms .term.ellipsis {
+  overflow: hidden;
+  -ms-grid-row-span: 1 !important;
+      grid-row-end: span 1 !important;
+}
+
+.AI_extraction_module .terms .term.ellipsis .target_text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 body ::-webkit-scrollbar {
