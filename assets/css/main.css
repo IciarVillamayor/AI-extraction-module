@@ -3501,12 +3501,12 @@ h5 {
 
 .AI_extraction_module .terms {
   background-color: #3A3A3C;
-  height: 14rem;
+  height: calc(14rem - 1px);
   overflow: hidden;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: (minmax(3.5rem, 1fr))[auto-fit];
-      grid-template-rows: repeat(auto-fit, minmax(3.5rem, 1fr));
+  -ms-grid-rows: (minmax(3.5rem, 1fr))[auto-fill];
+      grid-template-rows: repeat(auto-fill, minmax(3.5rem, 1fr));
   -ms-grid-columns: 100%;
       grid-template-columns: 100%;
 }
@@ -3519,6 +3519,10 @@ h5 {
   display: flex;
   -ms-flex-line-pack: center;
       align-content: center;
+  min-height: 3.5rem;
+  background-color: #363636;
+  -webkit-transition: background-color 300ms ease;
+  transition: background-color 300ms ease;
 }
 
 .AI_extraction_module .terms .term .termText {
@@ -3533,7 +3537,6 @@ h5 {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  min-height: 2.75rem;
   overflow: hidden;
 }
 
@@ -3573,8 +3576,8 @@ h5 {
   font-weight: 600;
 }
 
-.AI_extraction_module .terms .term:last-child {
-  border: 0;
+.AI_extraction_module .terms .term.newTerm:hover {
+  background-color: #0b3147;
 }
 
 .AI_extraction_module .terms .term.double {
@@ -3592,6 +3595,10 @@ h5 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.AI_extraction_module .terms .term:hover {
+  background-color: #313131;
 }
 
 body ::-webkit-scrollbar {
