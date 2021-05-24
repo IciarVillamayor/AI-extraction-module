@@ -10,7 +10,7 @@ window.onload = () => {
  */
 let data;
 let debug = location.href.includes("debug=true");
-let debugSeed = 5000;
+let debugSeed = 3000;
 
 /**
  * init fn
@@ -60,8 +60,7 @@ class LoopExtractionModule {
         const timeStamp = new Date().getTime() - this.initialTimeStamp;
 
         if (debug) {
-            data.forEach((dItem, i) => {
-                this.propagateTick(i * debugSeed)
+                this.propagateTick(timeStamp);
             });
         } else {
             this.timer = setInterval(() => {
