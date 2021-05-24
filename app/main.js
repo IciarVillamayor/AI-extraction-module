@@ -1,38 +1,51 @@
+/**
+ * load event
+ */
 window.onload = () => {
     init();
 };
 
-const init = () => {
-    fetch("app/models/terms.csv")
-        .then((d) => d.text())
-        .then((d) => {
-            console.log(d);
-        });
+/**
+ * global vars
+ */
+let data;
+
+/**
+ * init fn
+ *
+ * Extract data from CSV
+ * Instantiate LoopExtractionModule
+ * Append ExtractorModules
+ * Kickstart timer
+ */
+const init = async () => {
+    await extractData();
 
     const loop = new LoopExtractionModule();
-    loop.append(
-        new ExtractionModuleNames({
-            data: namedEntities,
-            root: "#entities_terms",
-        })
-    )
-        .append(
-            new ExtractionModuleTerms({
-                data: specialisticTerms,
-                root: "#specialistic_terms",
-            })
-        )
-        .append(
-            new ExtractionModuleNumbers({
-                data: numbers,
-                root: "#numeric_terms",
-            })
-        )
+    loop.append(new ExtractionModuleNames("#entities_terms"))
+        .append(new ExtractionModuleTerms("#specialistic_terms"))
+        .append(new ExtractionModuleNumbers("#numeric_terms"))
         .start();
 };
 
 /**
+ * Extract data from CSV
+ */
+const extractData = async () => {
+    const config = {
+        header: true,
+    };
+    data = await fetch("app/models/terms.csv")
+        .then((d) => d.text())
+        .then((d) => Papa.parse(d, config).data);
+};
+
+/**
+ * LoopExtractionModule
  *
+ * Singleton Object.
+ * Initiates ticker and propagates data to Extractors
+ * based on data type
  */
 class LoopExtractionModule {
     constructor() {
@@ -43,7 +56,6 @@ class LoopExtractionModule {
     start() {
         this.initialTimeStamp = new Date().getTime();
         const timeStamp = new Date().getTime() - this.initialTimeStamp;
-        this.propagateStart(timeStamp);
 
         this.timer = setInterval(() => {
             const timeStamp = new Date().getTime() - this.initialTimeStamp;
@@ -54,63 +66,60 @@ class LoopExtractionModule {
         this.components.push(component);
         return this;
     }
-    propagateStart(timeStamp) {
-        this.components.forEach((component) => {
-            component.start(timeStamp);
-        });
-    }
     propagateTick(timeStamp) {
-        this.components.forEach((component) => {
-            component.tick(timeStamp);
-        });
+        const date = new Date(timeStamp);
+        const minutes = date.getMinutes();
+        const seconds = date.toISOString().substr(17, 2);
+        const timeStampString = `${minutes}:${seconds}`;
+        const dataToSend = data.find((d) => d["Time stamp"] == timeStampString);
+        const dataToSendIndex = data.findIndex(
+            (d) => d["Time stamp"] == timeStampString
+        );
+
+        console.log("Timer: " + timeStampString);
+        console.log(dataToSend);
+
+        if (dataToSend) {
+            switch (dataToSend["Type"]) {
+                case "Named entity":
+                    this.components[0].tick(dataToSend);
+                    break;
+                case "Terms":
+                    this.components[1].tick(dataToSend);
+                    break;
+                case "Numbers":
+                    this.components[2].tick(dataToSend);
+                    break;
+                default:
+            }
+            data.splice(dataToSendIndex, 1);
+        }
     }
 }
 
 /**
- *
+ * Abstract class defining Modules
  */
 class AbstractExtractionModule {
-    constructor({ data, root }) {
-        this.data = data;
+    constructor(root) {
+        this.data = [];
         this.timer;
-        this.hasBegan = false;
-        this.hasEnded = false;
         this.$root = document.querySelector(root);
         this.$blocks = [];
-        this.lastRenderedIndex = 0;
-
-        this.init();
-    }
-    init() {
+        this.lastRenderedIndex = -1;
         this.clearElements();
     }
-    start() {
-        this.hasBegan = true;
-    }
-    tick(timeStamp) {
-        const date = new Date(timeStamp);
-        const hours = date.getHours() - 1;
-        const minutes = date.getMinutes();
-        const seconds = date.getSeconds();
-        console.log(`${hours}:${minutes}:${seconds}`);
-        if (this.data[this.lastRenderedIndex]) {
-            this.renderElementById(this.lastRenderedIndex);
-            this.lastRenderedIndex++;
-        } else {
-            this.hasEnded = true;
-        }
+    tick(dataReceived) {
+        this.data.push(dataReceived);
+        this.lastRenderedIndex++;
+        this.renderElementByIndex();
     }
     clearElements() {
         this.$blocks = [];
         this.$root.innerHTML = "";
     }
-    renderAllElements() {
-        this.data.forEach((dItem) => {
-            this.renderElementById(dItem.id);
-        });
-    }
-    renderElementById(id) {
-        const dItem = this.data.find((d) => d.id == id);
+    renderElementByIndex() {
+        const dItem = this.data[this.lastRenderedIndex];
         if (dItem) {
             //
             this.setLastToUnactive();
@@ -119,7 +128,7 @@ class AbstractExtractionModule {
             let $el = document.createElement("div");
             $el.classList.add("term");
             $el.classList.add("newTerm");
-            $el.dataset.id = dItem.id;
+            $el.dataset.id = dItem["#"];
             $el.innerHTML = this.createInnerHTML(dItem);
             this.$root.innerHTML = $el.outerHTML + this.$root.innerHTML;
             this.setScrollToTop();
@@ -127,7 +136,6 @@ class AbstractExtractionModule {
             //
             $el = this.$root.querySelectorAll(".term")[0];
             this.$blocks.push($el);
-            this.lastRenderedIndex = id;
 
             //
             return $el;
@@ -139,8 +147,8 @@ class AbstractExtractionModule {
         return `
             <div class="newIndicator"></div>
             <div class="termText ">
-                <span class="source_text">${dItem.source}</span>
-                <span class="target_text">${dItem.target}</span>
+                <span class="source_text">${dItem["Target"] ? dItem["Source"] : ""}</span>
+                <span class="target_text">${dItem["Target"] ? dItem["Target"] : dItem["Source"]}</span>
             </div>
         `;
     }
@@ -155,6 +163,9 @@ class AbstractExtractionModule {
     }
 }
 
+/**
+ * Modules based on type
+ */
 class ExtractionModuleNames extends AbstractExtractionModule {}
 class ExtractionModuleTerms extends AbstractExtractionModule {}
 class ExtractionModuleNumbers extends AbstractExtractionModule {
@@ -165,8 +176,8 @@ class ExtractionModuleNumbers extends AbstractExtractionModule {
 
             </div>
             <div class="termText">
-                <span class="number_text">${dItem.number}</span>
-                <span class="referent_text">${dItem.referent}</span>
+                <span class="number_text">${dItem["Source"]}</span>
+                <span class="referent_text">${dItem["Position"]}</span>
             </div>
         `;
     }
