@@ -168,8 +168,6 @@ class AbstractExtractionModule {
         `;
     }
     setLastToUnactive() {
-        console.log(this.$blocks);
-
         if (this.$blocks[this.lastRenderedIndex - 1]) {
             const lastBlock = this.$blocks[this.lastRenderedIndex - 1];
             lastBlock.classList.remove("newTerm");
