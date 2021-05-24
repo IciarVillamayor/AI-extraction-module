@@ -6,6 +6,6 @@ Testing purposes
 ### Roadmap
 
 - [x] ~~Improve grid~~
-- [x] ~~Improve gridlines for AI-extractor~~~
+- [x] ~~Improve gridlines for AI-extractor~~
 - [ ] Create lines assignment algorithm
 - [ ] Timer in fast forward
