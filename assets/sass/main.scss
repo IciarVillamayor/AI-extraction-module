@@ -33,6 +33,7 @@ body {
         grid-column-gap: $base;
         grid-row-gap: $base;
         grid-template-rows: 52px 1fr 24%;
+        overflow: hidden;
 
         header{
           grid-area: 1/ 1/ 2/ 2;

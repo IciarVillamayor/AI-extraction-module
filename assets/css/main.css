@@ -3610,6 +3610,7 @@ body .app {
   grid-row-gap: 0.5rem;
   -ms-grid-rows: 52px 1fr 24%;
       grid-template-rows: 52px 1fr 24%;
+  overflow: hidden;
 }
 
 html .app header,
