@@ -9,4 +9,4 @@ Testing purposes
 - [x] ~~Improve gridlines for AI-extractor~~
 - [x] ~~Timer in fast forward~~
 - [x] ~~Create lines assignment algorithm~~
-- []  Review some assignment algorithm corner cases
+- [ ]  Review some assignment algorithm corner cases
