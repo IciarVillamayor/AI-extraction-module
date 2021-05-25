@@ -7,5 +7,5 @@ Testing purposes
 
 - [x] ~~Improve grid~~
 - [x] ~~Improve gridlines for AI-extractor~~
+- [x] ~~Timer in fast forward~~
 - [ ] Create lines assignment algorithm
-- [ ] Timer in fast forward
