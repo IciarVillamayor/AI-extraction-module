@@ -97,6 +97,12 @@ $ai_base_line_size: 7;
                 position: relative;
                 border-bottom: 1px solid #35556d;
 
+                * {
+                    visibility: hidden;
+                    opacity: 0;
+                    animation: newTermIn 750ms ease-in-out 1ms 1 normal forwards;
+                }
+                
                 .newIndicator {
                     width: 3px;
                     height: 30px;
@@ -133,5 +139,16 @@ $ai_base_line_size: 7;
                 background-color: #313131;
             }
         }
+    }
+}
+
+@keyframes newTermIn {
+    from {
+        visibility: hidden;
+        opacity: 0;
+    }
+    to {
+        visibility: visible;
+        opacity: 1;
     }
 }

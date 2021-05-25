@@ -3562,6 +3562,13 @@ h5 {
   border-bottom: 1px solid #35556d;
 }
 
+.AI_extraction_module .terms .term.newTerm * {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-animation: newTermIn 750ms ease-in-out 1ms 1 normal forwards;
+          animation: newTermIn 750ms ease-in-out 1ms 1 normal forwards;
+}
+
 .AI_extraction_module .terms .term.newTerm .newIndicator {
   width: 3px;
   height: 30px;
@@ -3599,6 +3606,28 @@ h5 {
 
 .AI_extraction_module .terms .term:hover {
   background-color: #313131;
+}
+
+@-webkit-keyframes newTermIn {
+  from {
+    visibility: hidden;
+    opacity: 0;
+  }
+  to {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@keyframes newTermIn {
+  from {
+    visibility: hidden;
+    opacity: 0;
+  }
+  to {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 body ::-webkit-scrollbar {
