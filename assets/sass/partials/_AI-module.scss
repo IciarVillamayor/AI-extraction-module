@@ -51,7 +51,7 @@ $ai_base_line_size: 7;
         height: calc(#{$base * ($ai_base_line_size * $ai_base_lines)} - 1px);
         overflow: hidden;
         display: grid;
-        grid-template-rows: repeat(auto-fill, minmax($base * $ai_base_line_size, 1fr));
+        grid-template-rows: repeat($ai_base_lines, minmax($base * $ai_base_line_size, 1fr));
         grid-template-columns: 100%;
 
         // MAIN TERM STYLES (OLD TERM) 
