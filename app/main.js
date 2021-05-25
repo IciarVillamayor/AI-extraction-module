@@ -16,6 +16,7 @@ let query = location.search
     .map((a) => ({ key: a.split("=")[0], value: a.split("=")[1] }))
     .find((a) => a.key == "speed");
 let speed = query == undefined ? 1 : +query.value;
+let lastTime;
 
 /**
  * init fn
@@ -45,6 +46,24 @@ const extractData = async () => {
     data = await fetch("app/models/terms.csv")
         .then((d) => d.text())
         .then((d) => Papa.parse(d, config).data);
+
+    lastTime = stringToTimeStamp(
+        data
+            .map((d) => d["Time stamp"])
+            .sort()
+            .slice(-1)[0]
+    );
+};
+
+/**
+ *
+ */
+const stringToTimeStamp = (dateAsString) => {
+    const finalDateArr = dateAsString.split(":").map((a) => +a);
+    const timeStamp = new Date(
+        (finalDateArr[0] * 60 + finalDateArr[1]) * 1000
+    ).getTime();
+    return timeStamp;
 };
 
 /**
@@ -62,16 +81,12 @@ class LoopExtractionModule {
     }
     start({ debug }) {
         this.initialTimeStamp = new Date().getTime();
-        const timeStamp = new Date().getTime() - this.initialTimeStamp;
+        const timeStamp =
+            (new Date().getTime() - this.initialTimeStamp) * speed;
 
         if (debug) {
             data.forEach((dItem) => {
-                const finalDateArr = dItem["Time stamp"]
-                    .split(":")
-                    .map((a) => +a);
-                const timeStamp = new Date(
-                    (finalDateArr[0] * 60 + finalDateArr[1]) * 1000
-                ).getTime();
+                const timeStamp = stringToTimeStamp(dItem["Time stamp"]);
                 this.propagateTick(timeStamp);
             });
         } else {
@@ -79,6 +94,9 @@ class LoopExtractionModule {
                 const timeStamp =
                     (new Date().getTime() - this.initialTimeStamp) * speed;
                 this.propagateTick(timeStamp);
+                if (timeStamp > lastTime) {
+                    clearInterval(this.timer);
+                }
             }, 1000 / speed);
         }
     }
