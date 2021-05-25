@@ -10,6 +10,12 @@ window.onload = () => {
  */
 let data;
 let debug = location.href.includes("debug=true");
+let query = location.search
+    .slice(1)
+    .split("&")
+    .map((a) => ({ key: a.split("=")[0], value: a.split("=")[1] }))
+    .find((a) => a.key == "speed");
+let speed = query == undefined ? 1 : +query.value;
 
 /**
  * init fn
@@ -64,20 +70,16 @@ class LoopExtractionModule {
                     .split(":")
                     .map((a) => +a);
                 const timeStamp = new Date(
-                    1970,
-                    0,
-                    1,
-                    1,
-                    finalDateArr[0],
-                    finalDateArr[1]
+                    (finalDateArr[0] * 60 + finalDateArr[1]) * 1000
                 ).getTime();
                 this.propagateTick(timeStamp);
             });
         } else {
             this.timer = setInterval(() => {
-                const timeStamp = new Date().getTime() - this.initialTimeStamp;
+                const timeStamp =
+                    (new Date().getTime() - this.initialTimeStamp) * speed;
                 this.propagateTick(timeStamp);
-            }, 1000);
+            }, 1000 / speed);
         }
     }
     append(component) {
