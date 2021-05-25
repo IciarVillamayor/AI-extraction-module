@@ -29,7 +29,7 @@ let lastTime;
 const init = async () => {
     await extractData();
 
-    const loop = new LoopExtractionModule();
+    loop = new LoopExtractionModule();
     loop.append(new ExtractionModuleNames("#entities_terms"))
         .append(new ExtractionModuleTerms("#specialistic_terms"))
         .append(new ExtractionModuleNumbers("#numeric_terms"))
@@ -145,11 +145,14 @@ class AbstractExtractionModule {
         this.$root = document.querySelector(root);
         this.$blocks = [];
         this.lastRenderedIndex = -1;
+        this.lastGridPosition = -1;
+        this.gridBlocks = [null, null, null, null];
         this.clearElements();
     }
     tick(dataReceived) {
         this.data.push(dataReceived);
         this.lastRenderedIndex++;
+        this.lastGridPosition++;
         this.renderElementByIndex();
     }
     clearElements() {
@@ -165,18 +168,44 @@ class AbstractExtractionModule {
             $el.classList.add("newTerm");
             $el.dataset.id = dItem["#"];
             $el.innerHTML = this.createInnerHTML(dItem);
+            $el.style.gridRowStart = (this.lastGridPosition % 4) + 1;
+            $el.style.gridColumnStart = 1;
+
             this.$root.appendChild($el);
+            this.setPlacingAlgorithm($el);
 
             //
-            $el = this.$root.querySelectorAll(".term");
-            this.$blocks.push($el[$el.length - 1]);
+            // $el = this.$root.querySelectorAll(".term");
+            this.$blocks.push($el);
 
             //
             this.setLastToUnactive();
-            this.setScrollToBottom();
+            this.collectGarbage();
             return $el;
         } else {
             return false;
+        }
+    }
+    setPlacingAlgorithm($el) {
+        const isTwoLines = $el.querySelector(".target_text, .number_text").clientHeight > 20;
+        this.gridBlocks[this.lastGridPosition % 4] = $el;
+
+        if (isTwoLines) {
+            $el.classList.add("double");
+            this.lastGridPosition++;
+            this.gridBlocks[(this.lastGridPosition % 4)] = $el;
+        }
+        for (let i = 0; i < 4; i++) {
+            if (this.lastGridPosition % 4 == i) {
+                if (this.gridBlocks[i+1]) {
+                    this.gridBlocks[i+1].classList.add("ellipsis");
+                    this.gridBlocks[i+1].style.gridRowStart = i+2;
+                }
+            } 
+        }
+        if (isTwoLines && this.lastGridPosition % 4 == 0) {
+            this.gridBlocks[3].style.gridRowStart = 3;
+            this.lastGridPosition--;
         }
     }
     createInnerHTML(dItem) {
@@ -193,19 +222,17 @@ class AbstractExtractionModule {
         `;
     }
     setLastToUnactive() {
-        if (this.$blocks[this.lastRenderedIndex - 1]) {
-            const lastBlock = this.$blocks[this.lastRenderedIndex - 1];
+        const lastBlock = this.$blocks[this.lastRenderedIndex - 1];
+
+        if (this.$blocks[this.lastRenderedIndex - 1] != undefined) {
             lastBlock.classList.remove("newTerm");
         }
     }
-    setScrollToTop() {
-        this.$root.scrollTo(0, 0);
-    }
-    setScrollToBottom() {
-        this.$root.scrollTo(0, this.$root.scrollHeight);
-        if (debug) {
-            this.$root.style.overflowY = "auto";
-        }
+    collectGarbage() {
+        this.$blocks = this.$blocks.map($block => {
+            if (!this.gridBlocks.includes($block) && $block) $block.outerHTML = ""
+            else return $block
+        });
     }
 }
 
