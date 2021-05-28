@@ -9,4 +9,9 @@ Testing purposes
 - [x] ~~Improve gridlines for AI-extractor~~
 - [x] ~~Timer in fast forward~~
 - [x] ~~Create lines assignment algorithm~~
-- [ ]  Review some assignment algorithm corner cases
+
+
+#### Corner cases to review
+- [ ]  Fire again the animation on same term in same place
+- [ ]  Repeat block where source or target
+- [ ]  Error reported by francesca
