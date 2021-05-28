@@ -93,9 +93,10 @@ $ai_base_line_size: 7;
 
             // NEW TERM
             &.newTerm {
-                background-color: $new_term_bg;
+                // background-color: $new_term_bg;
                 position: relative;
                 border-bottom: 1px solid #35556d;
+                animation: newTermInBg 450ms ease-in-out 1ms 1 normal forwards;
 
                 * {
                     visibility: hidden;
@@ -150,5 +151,13 @@ $ai_base_line_size: 7;
     to {
         visibility: visible;
         opacity: 1;
+    }
+}
+@keyframes newTermInBg {
+    from {
+        background-color: #363636;
+    }
+    to {
+        background-color: $new_term_bg;
     }
 }

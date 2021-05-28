@@ -149,11 +149,20 @@ class AbstractExtractionModule {
         this.gridBlocks = [null, null, null, null];
         this.clearElements();
     }
-    tick(dataReceived) {
-        this.data.push(dataReceived);
-        this.lastRenderedIndex++;
-        this.lastGridPosition++;
-        this.renderElementByIndex();
+    async tick(dataReceived) {
+        const whosAlreadyRendered = this.isAlreadyRendered(dataReceived);
+        this.setAllToUnactive();
+
+        if (whosAlreadyRendered == null) {
+            this.data.push(dataReceived);
+            this.lastRenderedIndex++;
+            this.lastGridPosition++;
+            this.renderElementByIndex();
+        } else {
+            whosAlreadyRendered.style.animation = "none";
+            whosAlreadyRendered.style.animation = "";
+            whosAlreadyRendered.classList.add("newTerm");
+        }
     }
     clearElements() {
         this.$blocks = [];
@@ -167,19 +176,14 @@ class AbstractExtractionModule {
             $el.classList.add("term");
             $el.classList.add("newTerm");
             $el.dataset.id = dItem["#"];
-            $el.innerHTML = this.createInnerHTML(dItem);
             $el.style.gridRowStart = (this.lastGridPosition % 4) + 1;
             $el.style.gridColumnStart = 1;
+            $el.innerHTML = this.createInnerHTML(dItem);
 
             this.$root.appendChild($el);
             this.setPlacingAlgorithm($el);
-
-            //
-            // $el = this.$root.querySelectorAll(".term");
             this.$blocks.push($el);
 
-            //
-            this.setLastToUnactive();
             this.collectGarbage();
             return $el;
         } else {
@@ -187,21 +191,22 @@ class AbstractExtractionModule {
         }
     }
     setPlacingAlgorithm($el) {
-        const isTwoLines = $el.querySelector(".target_text, .number_text").clientHeight > 20;
+        const isTwoLines =
+            $el.querySelector(".target_text, .number_text").clientHeight > 20;
         this.gridBlocks[this.lastGridPosition % 4] = $el;
 
         if (isTwoLines) {
             $el.classList.add("double");
             this.lastGridPosition++;
-            this.gridBlocks[(this.lastGridPosition % 4)] = $el;
+            this.gridBlocks[this.lastGridPosition % 4] = $el;
         }
         for (let i = 0; i < 4; i++) {
             if (this.lastGridPosition % 4 == i) {
-                if (this.gridBlocks[i+1]) {
-                    this.gridBlocks[i+1].classList.add("ellipsis");
-                    this.gridBlocks[i+1].style.gridRowStart = i+2;
+                if (this.gridBlocks[i + 1]) {
+                    this.gridBlocks[i + 1].classList.add("ellipsis");
+                    this.gridBlocks[i + 1].style.gridRowStart = i + 2;
                 }
-            } 
+            }
         }
         if (isTwoLines && this.lastGridPosition % 4 == 0) {
             this.gridBlocks[3].style.gridRowStart = 3;
@@ -221,18 +226,57 @@ class AbstractExtractionModule {
             </div>
         `;
     }
-    setLastToUnactive() {
-        const lastBlock = this.$blocks[this.lastRenderedIndex - 1];
-
-        if (this.$blocks[this.lastRenderedIndex - 1] != undefined) {
-            lastBlock.classList.remove("newTerm");
-        }
+    setAllToUnactive() {
+        this.gridBlocks
+            .filter((gb) => gb != null)
+            .forEach((gb) => {
+                gb.classList.remove("newTerm");
+            });
     }
     collectGarbage() {
-        this.$blocks = this.$blocks.map($block => {
-            if (!this.gridBlocks.includes($block) && $block) $block.outerHTML = ""
-            else return $block
+        this.$blocks = this.$blocks.map(($block) => {
+            if (!this.gridBlocks.includes($block) && $block)
+                $block.outerHTML = "";
+            else return $block;
         });
+    }
+    isAlreadyRendered(dataReceived) {
+        let gbOut = null;
+        if (
+            dataReceived["Type"] == "Named entity" ||
+            dataReceived["Type"] == "Terms"
+        ) {
+            this.gridBlocks.forEach((gb, i) => {
+                if (gb && gb.querySelector(".source_text")) {
+                    if (
+                        gb.querySelector(".source_text").innerHTML ==
+                            dataReceived["Source"] ||
+                        gb.querySelector(".target_text").innerHTML ==
+                            dataReceived["Target"]
+                    ) {
+                        gbOut = gb;
+                    }
+                }
+            });
+        }
+
+        //
+        if (dataReceived["Type"] == "Numbers") {
+            this.gridBlocks.forEach((gb, i) => {
+                if (gb && gb.querySelector(".number_text")) {
+                    if (
+                        gb.querySelector(".number_text").innerText ==
+                            dataReceived["Target"] &&
+                        gb.querySelector(".referent_text").innerText ==
+                            dataReceived["Position"]
+                    ) {
+                        gbOut = gb;
+                    }
+                }
+            });
+        }
+
+        return gbOut;
     }
 }
 
