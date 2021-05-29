@@ -130,7 +130,7 @@ class LoopExtractionModule {
                     break;
                 default:
             }
-            data.splice(dataToSendIndex, 1);
+            // data.splice(dataToSendIndex, 1);
         }
     }
 }
@@ -159,8 +159,8 @@ class AbstractExtractionModule {
             this.lastGridPosition++;
             this.renderElementByIndex();
         } else {
-            whosAlreadyRendered.style.animation = "none";
-            whosAlreadyRendered.style.animation = "";
+            whosAlreadyRendered.classList.remove("newTerm");
+            void whosAlreadyRendered.offsetWidth;
             whosAlreadyRendered.classList.add("newTerm");
         }
     }
@@ -241,21 +241,22 @@ class AbstractExtractionModule {
         });
     }
     isAlreadyRendered(dataReceived) {
+        debugger;
+
         let gbOut = null;
         if (
             dataReceived["Type"] == "Named entity" ||
             dataReceived["Type"] == "Terms"
         ) {
             this.gridBlocks.forEach((gb, i) => {
-                if (gb && gb.querySelector(".source_text")) {
-                    if (
-                        gb.querySelector(".source_text").innerHTML ==
-                            dataReceived["Source"] ||
+                if (
+                    gb &&
+                    (gb.querySelector(".source_text").innerHTML ==
+                        dataReceived["Source"] ||
                         gb.querySelector(".target_text").innerHTML ==
-                            dataReceived["Target"]
-                    ) {
-                        gbOut = gb;
-                    }
+                            dataReceived["Target"])
+                ) {
+                    gbOut = gb;
                 }
             });
         }
