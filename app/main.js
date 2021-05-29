@@ -130,7 +130,6 @@ class LoopExtractionModule {
                     break;
                 default:
             }
-            // data.splice(dataToSendIndex, 1);
         }
     }
 }
@@ -140,55 +139,37 @@ class LoopExtractionModule {
  */
 class AbstractExtractionModule {
     constructor(root) {
-        this.data = [];
-        this.timer;
-        this.$root = document.querySelector(root);
-        this.$blocks = [];
         this.lastRenderedIndex = -1;
         this.lastGridPosition = -1;
         this.gridBlocks = [null, null, null, null];
-        this.clearElements();
+
+        this.$root = document.querySelector(root);
+        this.$root.innerHTML = "";
     }
-    async tick(dataReceived) {
+    tick(dataReceived) {
         const whosAlreadyRendered = this.isAlreadyRendered(dataReceived);
         this.setAllToUnactive();
 
         if (whosAlreadyRendered == null) {
-            this.data.push(dataReceived);
             this.lastRenderedIndex++;
             this.lastGridPosition++;
-            this.renderElementByIndex();
+            this.renderElementByIndex(dataReceived);
         } else {
-            whosAlreadyRendered.classList.remove("newTerm");
             void whosAlreadyRendered.offsetWidth;
             whosAlreadyRendered.classList.add("newTerm");
         }
     }
-    clearElements() {
-        this.$blocks = [];
-        this.$root.innerHTML = "";
-    }
-    renderElementByIndex() {
-        const dItem = this.data[this.lastRenderedIndex];
-        if (dItem) {
-            //
-            let $el = document.createElement("div");
-            $el.classList.add("term");
-            $el.classList.add("newTerm");
-            $el.dataset.id = dItem["#"];
-            $el.style.gridRowStart = (this.lastGridPosition % 4) + 1;
-            $el.style.gridColumnStart = 1;
-            $el.innerHTML = this.createInnerHTML(dItem);
+    renderElementByIndex(dataReceived) {
+        let $el = document.createElement("div");
+        $el.classList.add("term");
+        $el.classList.add("newTerm");
+        $el.style.gridRowStart = (this.lastGridPosition % 4) + 1;
+        $el.style.gridColumnStart = 1;
+        $el.innerHTML = this.createInnerHTML(dataReceived);
 
-            this.$root.appendChild($el);
-            this.setPlacingAlgorithm($el);
-            this.$blocks.push($el);
-
-            this.collectGarbage();
-            return $el;
-        } else {
-            return false;
-        }
+        this.$root.appendChild($el);
+        this.setPlacingAlgorithm($el);
+        this.collectGarbage();
     }
     setPlacingAlgorithm($el) {
         const isTwoLines =
@@ -213,15 +194,17 @@ class AbstractExtractionModule {
             this.lastGridPosition--;
         }
     }
-    createInnerHTML(dItem) {
+    createInnerHTML(dataReceived) {
         return `
             <div class="newIndicator"></div>
             <div class="termText ">
                 <span class="source_text">${
-                    dItem["Target"] ? dItem["Source"] : ""
+                    dataReceived["Target"] ? dataReceived["Source"] : ""
                 }</span>
                 <span class="target_text">${
-                    dItem["Target"] ? dItem["Target"] : dItem["Source"]
+                    dataReceived["Target"]
+                        ? dataReceived["Target"]
+                        : dataReceived["Source"]
                 }</span>
             </div>
         `;
@@ -234,36 +217,59 @@ class AbstractExtractionModule {
             });
     }
     collectGarbage() {
-        this.$blocks = this.$blocks.map(($block) => {
+        this.$root.querySelectorAll(".term").forEach(($block) => {
             if (!this.gridBlocks.includes($block) && $block)
                 $block.outerHTML = "";
-            else return $block;
         });
     }
     isAlreadyRendered(dataReceived) {
         let gbOut = null;
-        
-        const isNamedOrTerm = ["Named entity", "Terms"].includes(dataReceived["Type"]);
+
+        const isNamedOrTerm = ["Named entity", "Terms"].includes(
+            dataReceived["Type"]
+        );
         const isNumber = ["Numbers"].includes(dataReceived["Type"]);
-        
-        const renderedSource = (isNamedOrTerm && dataReceived["Target"]) ? dataReceived["Source"] : ""
-        const renderedTarget = (isNamedOrTerm && dataReceived["Target"]) ? dataReceived["Target"] : dataReceived["Source"];
-        const renderedSourceMatches = (gb) => gb && renderedSource == gb.querySelector(".source_text").innerHTML;
-        const renderedTargetMatches = (gb) => gb && renderedTarget == gb.querySelector(".target_text").innerHTML;
-        
-        const renderedNumberTarget = (isNumber && dataReceived["Target"]) ? dataReceived["Target"] : "";
-        const renderedNumberPosition = (isNumber && dataReceived["Position"]) ? dataReceived["Position"] : "";
-        const renderedNumberTargetMatches = (gb) => gb && renderedNumberTarget == gb.querySelector(".number_text").innerHTML;
-        const renderedNumberPositionMatches = (gb) => gb && renderedNumberPosition == gb.querySelector(".referent_text").innerHTML;
-                
+
+        const renderedSource =
+            isNamedOrTerm && dataReceived["Target"]
+                ? dataReceived["Source"]
+                : "";
+        const renderedTarget =
+            isNamedOrTerm && dataReceived["Target"]
+                ? dataReceived["Target"]
+                : dataReceived["Source"];
+        const renderedSourceMatches = (gb) =>
+            gb && renderedSource == gb.querySelector(".source_text").innerHTML;
+        const renderedTargetMatches = (gb) =>
+            gb && renderedTarget == gb.querySelector(".target_text").innerHTML;
+
+        const renderedNumberTarget =
+            isNumber && dataReceived["Target"] ? dataReceived["Target"] : "";
+        const renderedNumberPosition =
+            isNumber && dataReceived["Position"]
+                ? dataReceived["Position"]
+                : "";
+        const renderedNumberTargetMatches = (gb) =>
+            gb &&
+            renderedNumberTarget == gb.querySelector(".number_text").innerHTML;
+        const renderedNumberPositionMatches = (gb) =>
+            gb &&
+            renderedNumberPosition ==
+                gb.querySelector(".referent_text").innerHTML;
+
         if (isNamedOrTerm) {
             this.gridBlocks.forEach((gb, i) => {
-                if (renderedSourceMatches(gb) && renderedTargetMatches(gb)) gbOut = gb;
+                if (renderedSourceMatches(gb) && renderedTargetMatches(gb))
+                    gbOut = gb;
             });
         }
         if (isNumber) {
             this.gridBlocks.forEach((gb, i) => {
-                if (renderedNumberTargetMatches(gb) && renderedNumberPositionMatches(gb)) gbOut = gb;
+                if (
+                    renderedNumberTargetMatches(gb) &&
+                    renderedNumberPositionMatches(gb)
+                )
+                    gbOut = gb;
             });
         }
 
