@@ -3557,9 +3557,10 @@ h5 {
 }
 
 .AI_extraction_module .terms .term.newTerm {
-  background-color: #0B354E;
   position: relative;
   border-bottom: 1px solid #35556d;
+  -webkit-animation: newTermInBg 450ms ease-in-out 1ms 1 normal forwards;
+          animation: newTermInBg 450ms ease-in-out 1ms 1 normal forwards;
 }
 
 .AI_extraction_module .terms .term.newTerm * {
@@ -3627,6 +3628,24 @@ h5 {
   to {
     visibility: visible;
     opacity: 1;
+  }
+}
+
+@-webkit-keyframes newTermInBg {
+  from {
+    background-color: #363636;
+  }
+  to {
+    background-color: #0B354E;
+  }
+}
+
+@keyframes newTermInBg {
+  from {
+    background-color: #363636;
+  }
+  to {
+    background-color: #0B354E;
   }
 }
 
