@@ -12,6 +12,6 @@ Testing purposes
 
 
 #### Corner cases to review
-- [x]  Fire again the animation on same term in same place
-- [ ]  Repeat block where source or target
+- [x]  ~~Fire again the animation on same term in same place~~
+- [x]  ~~Repeat block where source or target~~
 - [ ]  Error reported by francesca

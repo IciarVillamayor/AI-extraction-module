@@ -241,39 +241,29 @@ class AbstractExtractionModule {
         });
     }
     isAlreadyRendered(dataReceived) {
-        debugger;
-
         let gbOut = null;
-        if (
-            dataReceived["Type"] == "Named entity" ||
-            dataReceived["Type"] == "Terms"
-        ) {
+        
+        const isNamedOrTerm = ["Named entity", "Terms"].includes(dataReceived["Type"]);
+        const isNumber = ["Numbers"].includes(dataReceived["Type"]);
+        
+        const renderedSource = (isNamedOrTerm && dataReceived["Target"]) ? dataReceived["Source"] : ""
+        const renderedTarget = (isNamedOrTerm && dataReceived["Target"]) ? dataReceived["Target"] : dataReceived["Source"];
+        const renderedSourceMatches = (gb) => gb && renderedSource == gb.querySelector(".source_text").innerHTML;
+        const renderedTargetMatches = (gb) => gb && renderedTarget == gb.querySelector(".target_text").innerHTML;
+        
+        const renderedNumberTarget = (isNumber && dataReceived["Target"]) ? dataReceived["Target"] : "";
+        const renderedNumberPosition = (isNumber && dataReceived["Position"]) ? dataReceived["Position"] : "";
+        const renderedNumberTargetMatches = (gb) => gb && renderedNumberTarget == gb.querySelector(".number_text").innerHTML;
+        const renderedNumberPositionMatches = (gb) => gb && renderedNumberPosition == gb.querySelector(".referent_text").innerHTML;
+                
+        if (isNamedOrTerm) {
             this.gridBlocks.forEach((gb, i) => {
-                if (
-                    gb &&
-                    (gb.querySelector(".source_text").innerHTML ==
-                        dataReceived["Source"] ||
-                        gb.querySelector(".target_text").innerHTML ==
-                            dataReceived["Target"])
-                ) {
-                    gbOut = gb;
-                }
+                if (renderedSourceMatches(gb) && renderedTargetMatches(gb)) gbOut = gb;
             });
         }
-
-        //
-        if (dataReceived["Type"] == "Numbers") {
+        if (isNumber) {
             this.gridBlocks.forEach((gb, i) => {
-                if (gb && gb.querySelector(".number_text")) {
-                    if (
-                        gb.querySelector(".number_text").innerText ==
-                            dataReceived["Target"] &&
-                        gb.querySelector(".referent_text").innerText ==
-                            dataReceived["Position"]
-                    ) {
-                        gbOut = gb;
-                    }
-                }
+                if (renderedNumberTargetMatches(gb) && renderedNumberPositionMatches(gb)) gbOut = gb;
             });
         }
 
