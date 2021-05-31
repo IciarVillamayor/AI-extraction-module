@@ -1,52 +1,84 @@
 #,Time stamp,Source,Target,Type,Position
-1,0:46,Tarō Asō,,Named entity,
-2,0:50,Hiroshige Sekō,,Named entity,
-3,0:51,"METI (Ministry of Economy, Trade and Industry)","METI (Ministero dell' Economia, del Commercio e dell'Industria)",Terms,
-4,0:54,Fumio Hayashi,,Named entity,
-5,0:55,GRIPS (National Graduate Institute for Policy Studies),GRIPS (Istituto superiore nazionale di scienze politiche),Terms,
-6,1:11,Kanagawa-ken,Prefettura di Kanagawa,Named entity,
-7,1:23,MPM (Monetary Policy Meeting),MPM (Conferenza di Politica Monetaria),Terms,
-8,1:46,GDP ,PIL,Terms,
-9,1:49,5.38 trillion,"5,38 billioni",Numbers,dollari USA
-10,2:27,Hiroshige Sekō,,Named entity,
-11,2:33,Kuroda Haruhiko,,Named entity,
-12,2:46,45,45,Numbers,minuti
-13,3:02,COVID-19,COVID-19,Terms,
-14,3:45,SFTBF (SoftBank),SFTBF (Softbank),Named entity,
-15,3:50,159.60 billion ,"159,60 miliardi",Numbers,dollari USA
-16,4:00,COVID-19,COVID-19,Terms,
-17,4:19,hot-rolled iron ,arrotolati laminati a caldo,Terms,
-18,4:22,3.51%,3.51%,Numbers,
-19,4:25,12.5 million ,"12,5 milioni",Numbers,tonnellate
-20,4:26,YTD (year to date),YTD (anno a data),Terms,
-21,4:27,2018,2018,Numbers,
-22,4:30,16.85 million,"16,85 milioni",Numbers,tonnellate
-23,4:32,YTD (year to date),YTD (anno a data),Terms,
-24,4:33,2019,2019,Numbers,
-25,4:58,spinning extruders ,estrusori rotanti,Terms,
-26,5:22,microassemblies,microassiemaggi ,Terms,
-27,5:25,semiconductor lithography equipment,apparecchiature per litografia di semiconduttori ,Terms,
-28,5:26,wire enamel,smalto per filo,Terms,
-29,6:07,woody biomass ,biomassa legnosa,Terms,
-30,6:10,10.2 million,"10,2 milioni",Numbers,BDt (tonnellate a secco)
-31,6:11,BDt (bone-dry metric tons),BDt (tonnellate a secco),Terms,
-32,6:12,2020,2020,Numbers,
-33,6:15,2022,2022,Numbers,
-34,6:17,biomass plant,impianto di biomassa,Terms,
-35,6:18,Aichi-ken,Prefettura di Aichi,Named entity,
-36,6:20,75,75,Numbers,megawatt
-37,6:26,Kyshu,Kyshu,Named entity,
-38,6:28,0.71 million,"0,71 milioni",Numbers,tonnellate
-39,6:30,PKS (palm kernel shells),PKS (guscio di palmisto),Terms,
-40,6:31,2018,2018,Numbers,
-41,7:07,65,65,Numbers,
-42,7:11,28.7%,"28,7%",Numbers,
-43,7:13,2020,2020,Numbers,
-44,7:19,"300,000",300.000,Numbers,
-45,7:20,2020,2020,Numbers,
-46,7:26,36.17 million ,"36,17 milioni",Numbers,persone
-47,7:28,65,65,Numbers,
-48,7:31,2020,2020,Numbers,
-49,7:58,Peptide Discovery Platform System,piattaforma di creazione dei peptidi,Terms,
-50,8:08,macrocyclic peptides,peptidi macrociclici,Terms,
-51,8:10,binding,legame,Terms,
+1,0:53,Paul Kagame,,Named entity,
+2,0:58,Soraya Hakuziyaremye,,Named entity,
+3,0:58,Rwanda,,Named entity,
+4,0:59,"MINICOM 
+(Ministry of Trade and Industry)","MINICOM
+(Ministero del Commercio e dell’Industria)",Terms,
+5,1:02,Giovanie Biha,,Named entity,
+6,1:03,"UNECA
+(United Nations Economic Commission for Africa)","ECA
+(Commissione economica per l'Africa)",Terms,
+7,1:31,Felix-Antoine Tshisekedi Tshilombo,,Named entity,
+8,1:48,African Union,Unione Africana,Named entity,
+9,2:09,Tshisekedi Tshilombo,,Named entity,
+10,2:17,Agenda 2063,Agenda 2063,Named entity,
+11,2:27,Kwesi Quartey,,Named entity,
+12,2:26,"AUC
+(African Union Commission)","AUC
+(Commissione dell’unione Africana)",Terms,
+13,2:35,Victor Harison,,Named entity,
+14,2:38,"DEA 
+(Department of Economic Affairs)","DEA
+(Dipartimento dell’Economia)",Terms,
+15,2:47,30,30,Numbers,minuti
+16,2:49,90,90,Numbers,minuti
+17,2:51,"Q&A
+(question and answer)","Q&A
+(sessione di domande e risposte)",Terms,
+18,3:26,gross domestic product,prodotto interno lordo,Terms,
+19,3:28,3.42 trillion,"3,42 bilioni",Numbers,dollari USA
+20,4:11,"AfCFTA 
+(the African Continental Free Trade Area)","AfCFTA
+(Trattato di Libero Commercio Continentale Africano)",Terms,
+21,4:29,working-age population,popolazione in età lavorativa,Terms,
+22,4:37,2030,2030,Numbers,
+23,4:40,2030,2030,Numbers,
+24,4:46,295 million,295 milioni,Numbers,nuove persone
+25,4:50,15–64,15–64,Numbers,
+26,4:55,15–64,15–64,Numbers,
+27,4:58,40%,40%,Numbers,
+28,4:59,2030,2030,Numbers,
+29,5:01,2030,2030,Numbers,
+30,5:04,1 billion,1 miliardo,Numbers,persone
+31,5:06,15–64,15–64,Numbers,
+32,5:30,2019,2019,Numbers,
+33,5:34,8.41,"8,41",Numbers,"mbd
+(milioni di barili al giorno)"
+34,5:35,"mbd
+(million barrels per day)","mbd
+(milioni di barili al giorno)",Terms,
+35,5:36,oil,petrolio,Terms,
+36,5:38,Madagascar,,Named entity,
+37,5:41,58,58.00.00,Numbers,tonnellate
+38,5:43,nickel,nichel,Terms,
+39,5:44,2021,2021,Numbers,
+40,5:46,Namibia,,Named entity,
+41,5:50,2.52 million,"2,52 milioni",Numbers,carati
+42,5:51,2018,2018,Numbers,
+43,6:09,praseodymium,praseodimio,Terms,
+44,6:10,dysprosium,diprosio,Terms,
+45,6:11,terbium,terbio,Terms,
+46,6:30,market cap,capitalizzazione di mercato,Terms,
+47,6:31,AngloGold Ashanti,,Named entity,
+48,6:37,12.13 billion,"12,13 miliardi",Numbers,dollari USA
+49,6:58,"LNG
+(liquefied natural gas)","GNL
+(gas naturale liquefatto)",Terms,
+50,7:01,150%,150%,Numbers,
+51,7:03,28,28,Numbers,"mtpy
+(milioni di tonnellate per anno)"
+52,7:04,"mtpy
+(million tonnes per year)","mtpy
+(milioni di tonnellate per anno)",Terms,
+53,7:06,2018,2018,Numbers,
+54,7:07,84,84,Numbers,"mtpy
+(milioni di tonnellate per anno)"
+55,7:10,2025,2025,Numbers,
+56,7:32,coal-bed methane,metano di origine minerale,Terms,
+57,7:52,coal matrix,matrice di carbone,Terms,
+58,7:55,hydrocarbon-storage capacity,capacità di deposito degli idrocarburi,Terms,
+59,7:57,coal-bed methane,metano di origine minerale,Terms,
+60,08:09,"AU
+(African Union)","UA
+(Unione Africana)",Terms,
