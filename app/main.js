@@ -94,7 +94,7 @@ class LoopExtractionModule {
                 const timeStamp =
                     (new Date().getTime() - this.initialTimeStamp) * speed;
                 this.propagateTick(timeStamp);
-                if (timeStamp > lastTime) {
+                if (timeStamp >= lastTime) {
                     clearInterval(this.timer);
                 }
             }, 1000 / speed);
