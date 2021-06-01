@@ -10,12 +10,14 @@ window.onload = () => {
  */
 let data;
 let debug = location.href.includes("debug=true");
-let query = location.search
+let query = (key) =>
+    location.search
     .slice(1)
     .split("&")
     .map((a) => ({ key: a.split("=")[0], value: a.split("=")[1] }))
-    .find((a) => a.key == "speed");
-let speed = query == undefined ? 1 : +query.value;
+        .find((a) => a.key == key);
+let speed = query("speed") == undefined ? 1 : +query("speed").value;
+let type = query("type") == undefined ? "normal" : +query("type").value;
 let lastTime;
 let globalOffsetTime = 2000;
 
@@ -33,8 +35,11 @@ const init = async () => {
     loop = new LoopExtractionModule();
     loop.append(new ExtractionModuleNames("#entities_terms"))
         .append(new ExtractionModuleTerms("#specialistic_terms"))
-        .append(new ExtractionModuleNumbers("#numeric_terms"))
-        .start({ debug });
+        .append(new ExtractionModuleNumbers("#numeric_terms"));
+    
+    setTimeout(() => {
+        loop.start({ debug });
+    }, globalOffsetTime)
 };
 
 /**
@@ -140,10 +145,24 @@ class LoopExtractionModule {
  */
 class AbstractExtractionModule {
     constructor(root) {
-        this.lastRenderedIndex = -1;
-        this.lastGridPosition = -1;
-        this.gridBlocks = [null, null, null, null];
-
+        this.uniqueID = 0;
+        this.gridBlocksFactory = (dataReceived, $el, uniqueID) => ({
+            id: +dataReceived["#"],
+            uniqueID,
+            $el,
+            rows: Math.ceil(
+                $el.querySelector(".target_text").clientHeight / 20
+            ),
+            ellipsed: false,
+            type: dataReceived.Type,
+            content: {
+                source: dataReceived.Source,
+                target: dataReceived.Target,
+                number: dataReceived.Type == "Number" && dataReceived.Target,
+                referent: dataReceived.Position,
+            },
+        });
+        this.gridBlocks = [];
         this.$root = document.querySelector(root);
         this.$root.innerHTML = "";
     }
@@ -152,8 +171,6 @@ class AbstractExtractionModule {
         this.setAllToUnactive();
 
         if (whosAlreadyRendered == null) {
-            this.lastRenderedIndex++;
-            this.lastGridPosition++;
             this.renderElementByIndex(dataReceived);
         } else {
             void whosAlreadyRendered.offsetWidth;
@@ -164,36 +181,67 @@ class AbstractExtractionModule {
         let $el = document.createElement("div");
         $el.classList.add("term");
         $el.classList.add("newTerm");
-        $el.style.gridRowStart = (this.lastGridPosition % 4) + 1;
-        $el.style.gridColumnStart = 1;
         $el.innerHTML = this.createInnerHTML(dataReceived);
-
         this.$root.appendChild($el);
-        this.setPlacingAlgorithm($el);
-        this.collectGarbage();
-    }
-    setPlacingAlgorithm($el) {
-        const isTwoLines =
-            $el.querySelector(".target_text, .number_text").clientHeight > 20;
-        this.gridBlocks[this.lastGridPosition % 4] = $el;
 
-        if (isTwoLines) {
-            $el.classList.add("double");
-            this.lastGridPosition++;
-            this.gridBlocks[this.lastGridPosition % 4] = $el;
+        this.setPlacingAlgorithm(dataReceived, $el);
+        this.renderAll();
+    }
+    setPlacingAlgorithm(dataReceived, $el) {
+        const newBlockData = this.gridBlocksFactory(dataReceived, $el, this.uniqueID++);
+        const blocksGot = this.gridBlocks.reduce((t, gb) => t + gb.rows, 0);
+        const blocksLeft = 4 - blocksGot;
+
+        // if fits, fits
+        if (blocksLeft >= newBlockData.rows) {
+            this.gridBlocks.push(newBlockData);
         }
-        for (let i = 0; i < 4; i++) {
-            if (this.lastGridPosition % 4 == i) {
-                if (this.gridBlocks[i + 1]) {
-                    this.gridBlocks[i + 1].classList.add("ellipsis");
-                    this.gridBlocks[i + 1].style.gridRowStart = i + 2;
+
+        // if doesn't fit
+        if (blocksLeft < newBlockData.rows) {
+            let index = 0;
+
+            const getOldest = (num = 0) => {
+                const oldest = this.gridBlocks.map((gb) => gb.uniqueID);
+                oldest.sort((a, b) => a - b);
+                console.log(oldest);
+                const oldestId = oldest[num];
+                const oldestIndex = this.gridBlocks.findIndex((gb) => gb.uniqueID == oldestId);
+                return oldestIndex;
                 }
+
+            const recursiveSplicing = () => {
+                const oldestIndex = getOldest(index);
+                const nextoldestIndex = getOldest(index+1); 
+
+                if (this.gridBlocks[oldestIndex].rows > newBlockData.rows - index) {
+                    const newGridBlock = [...this.gridBlocks];
+                    newGridBlock[oldestIndex].ellipsed = true;
+                    newGridBlock[oldestIndex].rows = newBlockData.rows - index;
+                    newGridBlock.splice(nextoldestIndex, 0, newBlockData);                    
+                    this.gridBlocks = [...newGridBlock];
+                } else if (
+                    this.gridBlocks[oldestIndex].rows == newBlockData.rows - index
+                ) {
+                    this.gridBlocks.splice(oldestIndex, 1, newBlockData);
+                } else {
+                    this.gridBlocks.splice(oldestIndex, 1);
+                    index++;
+                    recursiveSplicing();
             }
+            };
+            recursiveSplicing();
         }
-        if (isTwoLines && this.lastGridPosition % 4 == 0) {
-            this.gridBlocks[3].style.gridRowStart = 3;
-            this.lastGridPosition--;
         }
+    renderAll() {
+        this.$root.innerHTML = "";
+        this.gridBlocks.forEach((gb) => {
+            gb.$el.style.gridRowEnd = `span ${gb.rows}`;
+            gb.$el.dataset.id = gb.uniqueID;
+            if (gb.ellipsed) gb.$el.classList.add("ellipsis")
+            gb.$el.dataset.id = gb.uniqueID;
+            this.$root.appendChild(gb.$el);
+        });
     }
     createInnerHTML(dataReceived) {
         return `
@@ -211,17 +259,9 @@ class AbstractExtractionModule {
         `;
     }
     setAllToUnactive() {
-        this.gridBlocks
-            .filter((gb) => gb != null)
-            .forEach((gb) => {
+        this.$root.querySelectorAll(".term").forEach((gb) => {
                 gb.classList.remove("newTerm");
             });
-    }
-    collectGarbage() {
-        this.$root.querySelectorAll(".term").forEach(($block) => {
-            if (!this.gridBlocks.includes($block) && $block)
-                $block.outerHTML = "";
-        });
     }
     isAlreadyRendered(dataReceived) {
         let gbOut = null;
@@ -260,17 +300,17 @@ class AbstractExtractionModule {
 
         if (isNamedOrTerm) {
             this.gridBlocks.forEach((gb, i) => {
-                if (renderedSourceMatches(gb) && renderedTargetMatches(gb))
-                    gbOut = gb;
+                if (renderedSourceMatches(gb.$el) && renderedTargetMatches(gb.$el))
+                    gbOut = gb.$el;
             });
         }
         if (isNumber) {
             this.gridBlocks.forEach((gb, i) => {
                 if (
-                    renderedNumberTargetMatches(gb) &&
-                    renderedNumberPositionMatches(gb)
+                    renderedNumberTargetMatches(gb.$el) &&
+                    renderedNumberPositionMatches(gb.$el)
                 )
-                    gbOut = gb;
+                    gbOut = gb.$el;
             });
         }
 
@@ -291,7 +331,7 @@ class ExtractionModuleNumbers extends AbstractExtractionModule {
 
             </div>
             <div class="termText">
-                <span class="number_text">${dItem["Target"]}</span>
+                <span class="number_text target_text">${dItem["Target"]}</span>
                 <span class="referent_text">${dItem["Position"]}</span>
             </div>
         `;
