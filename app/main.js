@@ -17,6 +17,7 @@ let query = location.search
     .find((a) => a.key == "speed");
 let speed = query == undefined ? 1 : +query.value;
 let lastTime;
+let globalOffsetTime = 2000;
 
 /**
  * init fn
