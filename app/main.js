@@ -62,7 +62,7 @@ const extractData = async () => {
 const stringToTimeStamp = (dateAsString) => {
     const finalDateArr = dateAsString.split(":").map((a) => +a);
     const timeStamp = new Date(
-        (finalDateArr[0] * 60 + finalDateArr[1]) * 1000
+        (finalDateArr[0] * 60 + finalDateArr[1]) * 1000 + globalOffsetTime
     ).getTime();
     return timeStamp;
 };
