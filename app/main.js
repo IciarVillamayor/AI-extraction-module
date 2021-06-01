@@ -196,7 +196,7 @@ class AbstractExtractionModule {
 
         // if fits, fits
         if (blocksLeft >= newBlockData.rows) {
-            this.gridBlocks.push(newBlockData);
+            this.gridBlocks.unshift(newBlockData);
         }
         // if doesn't fit
         if (blocksLeft < newBlockData.rows) {
@@ -209,7 +209,7 @@ class AbstractExtractionModule {
                 this.gridBlocks[length-1].ellipsed = true;
                 this.gridBlocks[length-1].rows = this.gridBlocks[length-1].rows - 1;
             } else {
-                
+
             }
         }
     }
