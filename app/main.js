@@ -17,7 +17,7 @@ let query = (key) =>
     .map((a) => ({ key: a.split("=")[0], value: a.split("=")[1] }))
         .find((a) => a.key == key);
 let speed = query("speed") == undefined ? 1 : +query("speed").value;
-let type = query("type") == undefined ? "normal" : +query("type").value;
+let algType = query("type") == undefined ? "normal" : query("type").value;
 let lastTime;
 let globalOffsetTime = 2000;
 
@@ -184,8 +184,34 @@ class AbstractExtractionModule {
         $el.innerHTML = this.createInnerHTML(dataReceived);
         this.$root.appendChild($el);
 
-        this.setPlacingAlgorithm(dataReceived, $el);
+        if (algType == "normal") this.setPlacingAlgorithm(dataReceived, $el);
+        else if (algType == "twitter") this.setTwitterAlgorithm(dataReceived, $el);
+        
         this.renderAll();
+    }
+    setTwitterAlgorithm(dataReceived, $el) {
+        const newBlockData = this.gridBlocksFactory(dataReceived, $el, this.uniqueID++);
+        const blocksGot = this.gridBlocks.reduce((t, gb) => t + gb.rows, 0);
+        const blocksLeft = 4 - blocksGot;
+
+        // if fits, fits
+        if (blocksLeft >= newBlockData.rows) {
+            this.gridBlocks.push(newBlockData);
+        }
+        // if doesn't fit
+        if (blocksLeft < newBlockData.rows) {
+            const length = this.gridBlocks.length;
+            if (this.gridBlocks[length-1].rows == newBlockData.rows) {
+                this.gridBlocks.splice(-1);
+                this.gridBlocks.splice(0, 0, newBlockData)
+            } else if (this.gridBlocks[length-1].rows > newBlockData.rows) {
+                this.gridBlocks.splice(0, 0, newBlockData)
+                this.gridBlocks[length-1].ellipsed = true;
+                this.gridBlocks[length-1].rows = this.gridBlocks[length-1].rows - 1;
+            } else {
+                
+            }
+        }
     }
     setPlacingAlgorithm(dataReceived, $el) {
         const newBlockData = this.gridBlocksFactory(dataReceived, $el, this.uniqueID++);
@@ -208,7 +234,7 @@ class AbstractExtractionModule {
                 const oldestId = oldest[num];
                 const oldestIndex = this.gridBlocks.findIndex((gb) => gb.uniqueID == oldestId);
                 return oldestIndex;
-                }
+            }
 
             const recursiveSplicing = () => {
                 const oldestIndex = getOldest(index);
