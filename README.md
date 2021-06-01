@@ -16,4 +16,6 @@ Testing purposes
 - [x]  ~~Repeat block where source or target~~
 - [x]  ~~Last element won't show~~
 - [x]  ~~Set time offset~~
-- [ ]  Redo placing algorithm (Error reported by francesca)
+- [x]  ~~Redo placing algorithm (Error reported by francesca)~~
+- [x]  ~~Twitter like case~~
+- [ ]  Twitter entrying two lines, explore recursively what to do
