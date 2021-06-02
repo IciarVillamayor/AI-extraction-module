@@ -12,9 +12,9 @@ let data;
 let debug = location.href.includes("debug=true");
 let query = (key) =>
     location.search
-    .slice(1)
-    .split("&")
-    .map((a) => ({ key: a.split("=")[0], value: a.split("=")[1] }))
+        .slice(1)
+        .split("&")
+        .map((a) => ({ key: a.split("=")[0], value: a.split("=")[1] }))
         .find((a) => a.key == key);
 let speed = query("speed") == undefined ? 1 : +query("speed").value;
 let algType = query("type") == undefined ? "normal" : query("type").value;
@@ -36,7 +36,7 @@ const init = async () => {
     loop.append(new ExtractionModuleNames("#entities_terms"))
         .append(new ExtractionModuleTerms("#specialistic_terms"))
         .append(new ExtractionModuleNumbers("#numeric_terms"));
-    
+
     setTimeout(() => {
         loop.start({ debug });
     }, globalOffsetTime)
@@ -53,12 +53,7 @@ const extractData = async () => {
         .then((d) => d.text())
         .then((d) => Papa.parse(d, config).data);
 
-    lastTime = stringToTimeStamp(
-        data
-            .map((d) => d["Time stamp"])
-            .sort()
-            .slice(-1)[0]
-    );
+    lastTime = stringToTimeStamp(data.map((d) => d["Time stamp"]).sort().slice(-1)[0]);
 };
 
 /**
@@ -186,7 +181,7 @@ class AbstractExtractionModule {
 
         if (algType == "normal") this.setPlacingAlgorithm(dataReceived, $el);
         else if (algType == "twitter") this.setTwitterAlgorithm(dataReceived, $el);
-        
+
         this.renderAll();
     }
     setTwitterAlgorithm(dataReceived, $el) {
@@ -201,13 +196,13 @@ class AbstractExtractionModule {
         // if doesn't fit
         if (blocksLeft < newBlockData.rows) {
             const length = this.gridBlocks.length;
-            if (this.gridBlocks[length-1].rows == newBlockData.rows) {
+            if (this.gridBlocks[length - 1].rows == newBlockData.rows) {
                 this.gridBlocks.splice(-1);
                 this.gridBlocks.splice(0, 0, newBlockData)
-            } else if (this.gridBlocks[length-1].rows > newBlockData.rows) {
+            } else if (this.gridBlocks[length - 1].rows > newBlockData.rows) {
                 this.gridBlocks.splice(0, 0, newBlockData)
-                this.gridBlocks[length-1].ellipsed = true;
-                this.gridBlocks[length-1].rows = this.gridBlocks[length-1].rows - 1;
+                this.gridBlocks[length - 1].ellipsed = true;
+                this.gridBlocks[length - 1].rows = this.gridBlocks[length - 1].rows - 1;
             } else {
 
             }
@@ -230,7 +225,6 @@ class AbstractExtractionModule {
             const getOldest = (num = 0) => {
                 const oldest = this.gridBlocks.map((gb) => gb.uniqueID);
                 oldest.sort((a, b) => a - b);
-                console.log(oldest);
                 const oldestId = oldest[num];
                 const oldestIndex = this.gridBlocks.findIndex((gb) => gb.uniqueID == oldestId);
                 return oldestIndex;
@@ -238,27 +232,25 @@ class AbstractExtractionModule {
 
             const recursiveSplicing = () => {
                 const oldestIndex = getOldest(index);
-                const nextoldestIndex = getOldest(index+1); 
+                const nextoldestIndex = getOldest(index + 1);
 
                 if (this.gridBlocks[oldestIndex].rows > newBlockData.rows - index) {
                     const newGridBlock = [...this.gridBlocks];
                     newGridBlock[oldestIndex].ellipsed = true;
                     newGridBlock[oldestIndex].rows = newBlockData.rows - index;
-                    newGridBlock.splice(nextoldestIndex, 0, newBlockData);                    
+                    newGridBlock.splice(nextoldestIndex, 0, newBlockData);
                     this.gridBlocks = [...newGridBlock];
-                } else if (
-                    this.gridBlocks[oldestIndex].rows == newBlockData.rows - index
-                ) {
+                } else if (this.gridBlocks[oldestIndex].rows == newBlockData.rows - index) {
                     this.gridBlocks.splice(oldestIndex, 1, newBlockData);
                 } else {
                     this.gridBlocks.splice(oldestIndex, 1);
                     index++;
                     recursiveSplicing();
-            }
+                }
             };
             recursiveSplicing();
         }
-        }
+    }
     renderAll() {
         this.$root.innerHTML = "";
         this.gridBlocks.forEach((gb) => {
@@ -273,69 +265,40 @@ class AbstractExtractionModule {
         return `
             <div class="newIndicator"></div>
             <div class="termText ">
-                <span class="source_text">${
-                    dataReceived["Target"] ? dataReceived["Source"] : ""
-                }</span>
-                <span class="target_text">${
-                    dataReceived["Target"]
-                        ? dataReceived["Target"]
-                        : dataReceived["Source"]
-                }</span>
+                <span class="source_text">${dataReceived["Target"] ? dataReceived["Source"] : ""}</span>
+                <span class="target_text">${dataReceived["Target"] ? dataReceived["Target"] : dataReceived["Source"]}</span>
             </div>
         `;
     }
     setAllToUnactive() {
         this.$root.querySelectorAll(".term").forEach((gb) => {
-                gb.classList.remove("newTerm");
-            });
+            gb.classList.remove("newTerm");
+        });
     }
     isAlreadyRendered(dataReceived) {
         let gbOut = null;
 
-        const isNamedOrTerm = ["Named entity", "Terms"].includes(
-            dataReceived["Type"]
-        );
+        const isNamedOrTerm = ["Named entity", "Terms"].includes(dataReceived["Type"]);
         const isNumber = ["Numbers"].includes(dataReceived["Type"]);
 
-        const renderedSource =
-            isNamedOrTerm && dataReceived["Target"]
-                ? dataReceived["Source"]
-                : "";
-        const renderedTarget =
-            isNamedOrTerm && dataReceived["Target"]
-                ? dataReceived["Target"]
-                : dataReceived["Source"];
-        const renderedSourceMatches = (gb) =>
-            gb && renderedSource == gb.querySelector(".source_text").innerHTML;
-        const renderedTargetMatches = (gb) =>
-            gb && renderedTarget == gb.querySelector(".target_text").innerHTML;
+        const renderedSource = isNamedOrTerm && dataReceived["Target"] ? dataReceived["Source"] : "";
+        const renderedTarget = isNamedOrTerm && dataReceived["Target"] ? dataReceived["Target"] : dataReceived["Source"];
+        const renderedSourceMatches = (gb) => gb && renderedSource == gb.querySelector(".source_text").innerHTML;
+        const renderedTargetMatches = (gb) => gb && renderedTarget == gb.querySelector(".target_text").innerHTML;
 
-        const renderedNumberTarget =
-            isNumber && dataReceived["Target"] ? dataReceived["Target"] : "";
-        const renderedNumberPosition =
-            isNumber && dataReceived["Position"]
-                ? dataReceived["Position"]
-                : "";
-        const renderedNumberTargetMatches = (gb) =>
-            gb &&
-            renderedNumberTarget == gb.querySelector(".number_text").innerHTML;
-        const renderedNumberPositionMatches = (gb) =>
-            gb &&
-            renderedNumberPosition ==
-                gb.querySelector(".referent_text").innerHTML;
+        const renderedNumberTarget = isNumber && dataReceived["Target"] ? dataReceived["Target"] : "";
+        const renderedNumberPosition = isNumber && dataReceived["Position"] ? dataReceived["Position"] : "";
+        const renderedNumberTargetMatches = (gb) => gb && renderedNumberTarget == gb.querySelector(".number_text").innerHTML;
+        const renderedNumberPositionMatches = (gb) => gb && renderedNumberPosition == gb.querySelector(".referent_text").innerHTML;
 
         if (isNamedOrTerm) {
             this.gridBlocks.forEach((gb, i) => {
-                if (renderedSourceMatches(gb.$el) && renderedTargetMatches(gb.$el))
-                    gbOut = gb.$el;
+                if (renderedSourceMatches(gb.$el) && renderedTargetMatches(gb.$el)) gbOut = gb.$el;
             });
         }
         if (isNumber) {
             this.gridBlocks.forEach((gb, i) => {
-                if (
-                    renderedNumberTargetMatches(gb.$el) &&
-                    renderedNumberPositionMatches(gb.$el)
-                )
+                if (renderedNumberTargetMatches(gb.$el) && renderedNumberPositionMatches(gb.$el))
                     gbOut = gb.$el;
             });
         }
@@ -347,8 +310,8 @@ class AbstractExtractionModule {
 /**
  * Modules based on type
  */
-class ExtractionModuleNames extends AbstractExtractionModule {}
-class ExtractionModuleTerms extends AbstractExtractionModule {}
+class ExtractionModuleNames extends AbstractExtractionModule { }
+class ExtractionModuleTerms extends AbstractExtractionModule { }
 class ExtractionModuleNumbers extends AbstractExtractionModule {
     createInnerHTML(dItem) {
         super.createInnerHTML(dItem);
