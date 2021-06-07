@@ -49,7 +49,7 @@ const extractData = async () => {
     const config = {
         header: true,
     };
-    data = await fetch("app/models/terms.csv")
+    data = await fetch("app/models/terms_v3.csv")
         .then((d) => d.text())
         .then((d) => Papa.parse(d, config).data);
 
@@ -101,10 +101,20 @@ class LoopExtractionModule {
             }, 1000 / speed);
         }
     }
+    /**
+     * 
+     * @param {AbstractExtractionModule} component
+     * @returns {LoopExtractionModule}
+     */
     append(component) {
         this.components.push(component);
         return this;
     }
+    /**
+     * 
+     * @param {Number} timeStamp Get a timestap and kicks off element rendering
+     * @returns void
+     */
     propagateTick(timeStamp) {
         const date = new Date(timeStamp);
         const minutes = date.getMinutes();
@@ -181,6 +191,7 @@ class AbstractExtractionModule {
 
         if (algType == "normal") this.setPlacingAlgorithm(dataReceived, $el);
         else if (algType == "twitter") this.setTwitterAlgorithm(dataReceived, $el);
+        else if (algType == "twitterInverted") this.setTwitterInvertedAlgorithm(dataReceived, $el);
 
         this.renderAll();
     }
@@ -191,21 +202,59 @@ class AbstractExtractionModule {
 
         // if fits, fits
         if (blocksLeft >= newBlockData.rows) {
-            this.gridBlocks.unshift(newBlockData);
+            this.gridBlocks.splice(0, 0, newBlockData);
         }
         // if doesn't fit
         if (blocksLeft < newBlockData.rows) {
+            let index = 0;
+
+            const recursiveStacking = () => {
             const length = this.gridBlocks.length;
-            if (this.gridBlocks[length - 1].rows == newBlockData.rows) {
+                if (this.gridBlocks[length - 1].rows == newBlockData.rows - index) { // caso normal
                 this.gridBlocks.splice(-1);
                 this.gridBlocks.splice(0, 0, newBlockData)
-            } else if (this.gridBlocks[length - 1].rows > newBlockData.rows) {
+                } else if (this.gridBlocks[length - 1].rows > newBlockData.rows - index) { // caso A > N
                 this.gridBlocks.splice(0, 0, newBlockData)
                 this.gridBlocks[length - 1].ellipsed = true;
                 this.gridBlocks[length - 1].rows = this.gridBlocks[length - 1].rows - 1;
-            } else {
-
+                } else { // caso N > A
+                    this.gridBlocks.splice(-1);
+                    index++;
+                    recursiveStacking();
+                }
             }
+            recursiveStacking();
+        }
+        // debugger;
+    }
+    setTwitterInvertedAlgorithm(dataReceived, $el) {
+        const newBlockData = this.gridBlocksFactory(dataReceived, $el, this.uniqueID++);
+        const blocksGot = this.gridBlocks.reduce((t, gb) => t + gb.rows, 0);
+        const blocksLeft = 4 - blocksGot;
+
+        // if fits, fits
+        if (blocksLeft >= newBlockData.rows) {
+            this.gridBlocks.push(newBlockData);
+        }
+        // if doesn't fit
+        if (blocksLeft < newBlockData.rows) {
+            let index = 0;
+
+            const recursiveStacking = () => {
+                if (this.gridBlocks[0].rows == newBlockData.rows - index) { // caso normal
+                    this.gridBlocks.splice(0, 1);
+                    this.gridBlocks.push(newBlockData)
+                } else if (this.gridBlocks[length - 1].rows > newBlockData.rows - index) { // caso A > N
+                    this.gridBlocks[index].ellipsed = true;
+                    this.gridBlocks[index].rows = this.gridBlocks[index].rows - 1;
+                    this.gridBlocks.push(newBlockData)
+                } else { // caso N > A
+                    this.gridBlocks.splice(0, 1);
+                    index++;
+                    recursiveStacking();
+            }
+            }
+            recursiveStacking();
         }
     }
     setPlacingAlgorithm(dataReceived, $el) {
