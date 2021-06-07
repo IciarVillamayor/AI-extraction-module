@@ -19,7 +19,7 @@ let query = (key) =>
 let speed = query("speed") == undefined ? 1 : +query("speed").value;
 let algType = query("type") == undefined ? "normal" : query("type").value;
 let lastTime;
-let globalOffsetTime = 2000;
+let globalOffsetTime = 0;
 
 /**
  * init fn
@@ -208,15 +208,28 @@ class AbstractExtractionModule {
         if (blocksLeft < newBlockData.rows) {
             let index = 0;
 
+            const firstBiggest = (index) => {
+                const allOne = this.gridBlocks.every(gb => gb.rows == 1);
+                if (!allOne) {
+                    const sizes = this.gridBlocks.map(gb => gb.rows)
+                    sizes.reverse()
+                    const idx = sizes.findIndex(s => s-index > 1);
+                    return idx > -1 ? idx : 0;
+                } else {
+                    return 0;
+                }
+            }
+
             const recursiveStacking = () => {
-            const length = this.gridBlocks.length;
+                const biggest = firstBiggest(index);
+                const length = this.gridBlocks.length;
                 if (this.gridBlocks[length - 1].rows == newBlockData.rows - index) { // caso normal
                 this.gridBlocks.splice(-1);
                 this.gridBlocks.splice(0, 0, newBlockData)
-                } else if (this.gridBlocks[length - 1].rows > newBlockData.rows - index) { // caso A > N
+                } else if (this.gridBlocks[biggest].rows > newBlockData.rows - index) { // caso A > N
                 this.gridBlocks.splice(0, 0, newBlockData)
-                this.gridBlocks[length - 1].ellipsed = true;
-                this.gridBlocks[length - 1].rows = this.gridBlocks[length - 1].rows - 1;
+                this.gridBlocks[biggest].ellipsed = true;
+                this.gridBlocks[biggest].rows = this.gridBlocks[biggest].rows - 1;
                 } else { // caso N > A
                     this.gridBlocks.splice(-1);
                     index++;
@@ -225,7 +238,6 @@ class AbstractExtractionModule {
             }
             recursiveStacking();
         }
-        // debugger;
     }
     setTwitterInvertedAlgorithm(dataReceived, $el) {
         const newBlockData = this.gridBlocksFactory(dataReceived, $el, this.uniqueID++);
@@ -240,19 +252,32 @@ class AbstractExtractionModule {
         if (blocksLeft < newBlockData.rows) {
             let index = 0;
 
+            const firstBiggest = (index) => {
+                const allOne = this.gridBlocks.every(gb => gb.rows == 1);
+                if (!allOne) {
+                    const sizes = this.gridBlocks.map(gb => gb.rows)
+                    sizes.reverse()
+                    const idx = sizes.findIndex(s => s-index > 1);
+                    return idx > -1 ? idx : 0;
+                } else {
+                    return 0;
+                }
+            }
+
             const recursiveStacking = () => {
-                if (this.gridBlocks[0].rows == newBlockData.rows - index) { // caso normal
-                    this.gridBlocks.splice(0, 1);
+                const biggest = firstBiggest(index);
+                if (this.gridBlocks[biggest].rows == newBlockData.rows - index) { // caso normal
+                    this.gridBlocks.splice(biggest, 1);
                     this.gridBlocks.push(newBlockData)
-                } else if (this.gridBlocks[length - 1].rows > newBlockData.rows - index) { // caso A > N
-                    this.gridBlocks[index].ellipsed = true;
-                    this.gridBlocks[index].rows = this.gridBlocks[index].rows - 1;
+                } else if (this.gridBlocks[biggest].rows > newBlockData.rows - index) { // caso A > N
+                    this.gridBlocks[biggest].ellipsed = true;
+                    this.gridBlocks[biggest].rows = this.gridBlocks[biggest].rows - 1;
                     this.gridBlocks.push(newBlockData)
                 } else { // caso N > A
                     this.gridBlocks.splice(0, 1);
                     index++;
                     recursiveStacking();
-            }
+                }
             }
             recursiveStacking();
         }
