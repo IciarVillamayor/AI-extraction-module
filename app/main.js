@@ -61,9 +61,19 @@ const extractData = async () => {
  */
 const stringToTimeStamp = (dateAsString) => {
     const finalDateArr = dateAsString.split(":").map((a) => +a);
-    const timeStamp = new Date(
-        (finalDateArr[0] * 60 + finalDateArr[1]) * 1000 + globalOffsetTime
-    ).getTime();
+    const hasMiliSec = finalDateArr.length > 2;
+    let timeStamp;
+
+    if (hasMiliSec) {
+        timeStamp = new Date(
+            ((finalDateArr[0] * 60 + finalDateArr[1]) * 1000) + finalDateArr[1] * 10  + globalOffsetTime
+        ).getTime();
+    } else {
+        timeStamp = new Date(
+            (finalDateArr[0] * 60 + finalDateArr[1]) * 1000 + globalOffsetTime
+        ).getTime();
+    }
+
     return timeStamp;
 };
 
