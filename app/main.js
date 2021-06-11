@@ -49,7 +49,7 @@ const extractData = async () => {
     const config = {
         header: true,
     };
-    data = await fetch("app/models/terms_v3.csv")
+    data = await fetch("app/models/terms.csv")
         .then((d) => d.text())
         .then((d) => Papa.parse(d, config).data);
 
@@ -89,6 +89,7 @@ class LoopExtractionModule {
         this.components = [];
         this.timer;
         this.initialTimeStamp;
+        this.lastTickTimeStamp = new Date(0);
     }
     start({ debug }) {
         this.initialTimeStamp = new Date().getTime();
@@ -101,14 +102,18 @@ class LoopExtractionModule {
                 this.propagateTick(timeStamp);
             });
         } else {
-            this.timer = setInterval(() => {
-                const timeStamp =
-                    (new Date().getTime() - this.initialTimeStamp) * speed;
+            const tick = () => {
+                const timeStamp = (new Date().getTime() - this.initialTimeStamp) * speed;
                 this.propagateTick(timeStamp);
                 if (timeStamp >= lastTime) {
                     clearInterval(this.timer);
                 }
-            }, 1000 / speed);
+                requestAnimationFrame(tick);
+            };
+            tick();
+            // this.timer = setInterval(() => {
+         
+            // }, requestAnimationFrame() / speed);
         }
     }
     /**
@@ -127,15 +132,14 @@ class LoopExtractionModule {
      */
     propagateTick(timeStamp) {
         const date = new Date(timeStamp);
-        const minutes = date.getMinutes();
-        const seconds = date.toISOString().substr(17, 2);
-        const timeStampString = `${minutes}:${seconds}`;
-        const dataToSend = data.find((d) => d["Time stamp"] == timeStampString);
-        const dataToSendIndex = data.findIndex(
-            (d) => d["Time stamp"] == timeStampString
-        );
+        const dataToSend = data.find((d) => {
+            const rowDate = stringToTimeStamp(d["Time stamp"]);
+            const cDate = date.getTime();
+            const lDate = this.lastTickTimeStamp.getTime();
+            return lDate < rowDate && rowDate <= cDate
+        });
 
-        console.log("Timer: " + timeStampString);
+        console.log("Timer: " + date.toISOString().slice(14, -1));
         console.log(dataToSend);
 
         if (dataToSend) {
@@ -152,6 +156,8 @@ class LoopExtractionModule {
                 default:
             }
         }
+
+        this.lastTickTimeStamp = date;
     }
 }
 
