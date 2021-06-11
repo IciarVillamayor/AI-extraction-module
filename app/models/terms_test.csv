@@ -1,0 +1,88 @@
+#,Time stamp,Source,Target,Type,Position
+1,02:04:02,Paul Kagame,,Named entity,
+2,02:08:00,Soraya Hakuziyaremye,,Named entity,
+3,02:08:20,Rwanda,,Named entity,
+4,02:09:12,"MINICOM 
+(Ministry of Trade and Industry)","MINICOM
+(Ministero del Commercio e dell’Industria)",Terms,
+5,02:13:00,Giovanie Biha,,Named entity,
+6,02:14:06,"UNECA
+(United Nations Economic Commission for Africa)","ECA
+(Commissione economica per l'Africa)",Terms,
+7,02:41:24,Felix-Antoine Tshisekedi Tshilombo,,Named entity,
+8,02:58:05,African Union,Unione Africana,Named entity,
+9,03:02:27,African Union,Unione Africana,Named entity,
+10,03:16:24,Tshisekedi Tshilombo,,Named entity,
+11,03:27:10,Agenda 2063,Agenda 2063,Named entity,
+12,03:30:06,Kwesi Quartey,,Named entity,
+13,03:31:16,"AUC
+(African Union Commission)","AUC
+(Commissione dell’unione Africana)",Terms,
+14,03:38:29,Victor Harison,,Named entity,
+15,03:41:24,"DEA 
+(Department of Economic Affairs)","DEA
+(Dipartimento dell’Economia)",Terms,
+16,03:48:22,30,30,Numbers,minuti
+17,03:51:05,90,90,Numbers,minuti
+18,03:53:29,"Q&A
+(question and answer)","Q&A
+(sessione di domande e risposte)",Terms,
+19,04:24:29,gross domestic product,prodotto interno lordo,Terms,
+20,04:27:10,3.42 trillion,"3,42 bilioni",Numbers,dollari USA
+21,05:04:18,"AfCFTA 
+(the African Continental Free Trade Area)","AfCFTA
+(Trattato di Libero Commercio Continentale Africano)",Terms,
+22,05:19:06,working-age population,popolazione in età lavorativa,Terms,
+23,05:25:14,2030,2030,Numbers,
+24,05:28:19,2030,2030,Numbers,
+25,05:34:02,295 million,295 milioni,Numbers,persone
+26,05:37:02,15–64,15–64,Numbers,
+27,05:42:15,15–64,15–64,Numbers,
+28,05:44:28,40%,40%,Numbers,
+29,05:45:28,2030,2030,Numbers,
+30,05:48:29,2030,2030,Numbers,
+31,05:52:23,1 billion,1 miliardo,Numbers,persone
+32,05:54:25,15–64,15–64,Numbers,
+33,06:13:23,2019,2019,Numbers,
+34,06:16:29,8.41,"8,41",Numbers,"mbd
+(milioni di barili al giorno)"
+35,06:17:22,"mbd
+(million barrels per day)","mbd
+(milioni di barili al giorno)",Terms,
+36,06:18:10,oil,petrolio,Terms,
+37,06:20:03,Madagascar,,Named entity,
+38,06:24:10,"58,000",58.000,Numbers,tonnellate
+39,06:25:05,nickel,nichel,Terms,
+40,06:26:07,2021,2021,Numbers,
+41,06:28:07,Namibia,,Named entity,
+42,06:32:34,2.52 million,"2,52 milioni",Numbers,carati
+43,06:34:22,2018,2018,Numbers,
+44,06:51:28,praseodymium,praseodimio,Terms,
+45,06:53:02,dysprosium,diprosio,Terms,
+46,06:54:04,terbium,terbio,Terms,
+47,07:09:02,market cap,capitalizzazione di mercato,Terms,
+48,07:11:01,AngloGold Ashanti,,Named entity,
+49,07:17:15,12.13 billion,"12,13 miliardi",Numbers,dollari USA
+50,07:34:01,"LNG
+(liquefied natural gas)","GNL
+(gas naturale liquefatto)",Terms,
+51,07:36:23,150%,150%,Numbers,
+52,07:38:25,28,28,Numbers,"mtpy
+(milioni di tonnellate per anno)"
+53,07:40:08,"mtpy
+(million tonnes per year)","mtpy
+(milioni di tonnellate per anno)",Terms,
+54,07:41:22,2018,2018,Numbers,
+55,07:43:07,84,84,Numbers,"mtpy
+(milioni di tonnellate per anno)"
+56,07:44:09,"mtpy
+(million tonnes per year)","mtpy
+(milioni di tonnellate per anno)",Terms,
+57,07:45:13,2025,2025,Numbers,
+58,08:03:07,coal-bed methane,metano di origine minerale,Terms,
+59,08:22:18,coal matrix,matrice di carbone,Terms,
+60,08:25:12,hydrocarbon-storage capacity,capacità di deposito degli idrocarburi,Terms,
+61,08:27:17,coal-bed methane,metano di origine minerale,Terms,
+62,08:35:24,"AU
+(African Union)","UA
+(Unione Africana)",Terms,
